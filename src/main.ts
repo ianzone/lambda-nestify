@@ -1,3 +1,3 @@
-import { createApp } from './createApp';
+import { createApp } from './app';
 
 export const viteNodeApp = createApp();

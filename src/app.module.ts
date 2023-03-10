@@ -8,7 +8,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
-import { AuthenticationMiddleware, DocsMiddleware, LogMiddleware } from 'src/middlewares';
+import { AuthMiddleware, DocsMiddleware, LogMiddleware } from 'src/middlewares';
 import { RoutesModule } from 'src/routes';
 import { ServicesModule } from 'src/services';
 import { AppController } from './app.controller';
@@ -66,7 +66,7 @@ export class AppModule implements NestModule {
     consumer.apply(LogMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
     consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json');
     consumer
-      .apply(AuthenticationMiddleware)
+      .apply(AuthMiddleware)
       .exclude('/', ...swagger)
       .forRoutes('(.*)');
   }

@@ -1,6 +1,6 @@
 import awsLambdaFastify from '@fastify/aws-lambda';
 import { APIGatewayProxyEvent, Callback, Context, Handler } from 'aws-lambda';
-import { createApp } from './createApp';
+import { createApp } from './app';
 
 let cachedServer: Handler;
 
