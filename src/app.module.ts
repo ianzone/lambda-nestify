@@ -7,7 +7,9 @@ import {
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
+import { join, resolve } from 'path';
 import { AuthMiddleware, DocsMiddleware, LogMiddleware } from 'src/middlewares';
 import { RoutesModule } from 'src/routes';
 import { ServicesModule } from 'src/services';
@@ -33,6 +35,10 @@ import configs from './configs';
       load: [configs],
       isGlobal: true,
       cache: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(resolve(), 'client'),
+      serveRoot: '/client',
     }),
   ],
   controllers: [AppController],
@@ -62,12 +68,15 @@ export class AppModule implements NestModule {
       })
       .forRoutes('(.*)');
     // middleware are mounted in order
-    consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)'); // ClsMiddleware has to be mounted first
-    consumer.apply(LogMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
-    consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json');
+    consumer.apply(ClsMiddleware).exclude('/docs/(.*)', '/client(.*)').forRoutes('(.*)'); // ClsMiddleware has to be mounted first
+    consumer.apply(LogMiddleware).exclude('/docs/(.*)', '/client(.*)').forRoutes('(.*)');
+    consumer
+      .apply(DocsMiddleware)
+      .exclude('/docs/(.*)', '/client(.*)')
+      .forRoutes('/docs', '/docs-json');
     consumer
       .apply(AuthMiddleware)
-      .exclude('/', ...swagger)
+      .exclude('/', ...swagger, '/client(.*)')
       .forRoutes('(.*)');
   }
 }

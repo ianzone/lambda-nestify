@@ -61,6 +61,7 @@ const serverlessConfiguration: AWS = {
         '@nestjs/microservices',
         '@nestjs/platform-express',
         '@fastify/view',
+        'express',
       ],
     },
     prune: {
