@@ -3,11 +3,15 @@ pnpm i
 pnpm run dev
 
 TODO
+add swagger oauth2 and remove docs.middleware.ts
 
-replace REQUEST scope with nestjs-cls
+https://swagger.io/docs/open-source-tools/swagger-ui/usage/oauth2/
 
-https://medium.com/@sascha.wolff/advanced-nestjs-how-to-have-access-to-the-current-user-in-every-service-without-request-scope-2586665741f
+https://www.youtube.com/watch?v=H7U1lv354AU
 
-https://github.com/Papooch/nestjs-cls#the-authors-take
+https://www.youtube.com/watch?v=eE_X8Y180zs
 
-generate dependency tree https://github.com/jmcdo29/nestjs-spelunker
+https://github.com/suwa-yuki/swagger-3.0-oauth-with-cognito
+
+TODO
+add custom logger, cuz cloudwatch doesn't show colors

@@ -19,7 +19,7 @@ const serverlessConfiguration: AWS = {
     },
     logRetentionInDays: 60,
     environment: {
-      STAGE_PATH_PREFIX: '/${sls:stage}',
+      STAGE_PATH: '/${sls:stage}',
       NODE_OPTIONS: '--enable-source-maps',
     },
   },

@@ -29,6 +29,7 @@ export class AuthMiddleware implements NestMiddleware {
   // in fastify middleware, the req object is the raw node request object
   // https://www.fastify.io/docs/latest/Reference/Middleware/
   async use(req: IncomingMessage, res: any, next: () => void) {
+    this.logger.verbose('');
     if (this.configs.get('mode') === Mode.local) return next();
 
     try {
