@@ -3,6 +3,8 @@
     "dev": "vite",
     "build": "nest build",
     "start": "nest build && sls offline",
+    "deploy": "nest build && sls deploy",
+    "deploy:local": "nest build && sls deploy --stage local",
     "test": "vitest --run",
     "docs": "compodoc -p tsconfig.doc.json -s"
   },

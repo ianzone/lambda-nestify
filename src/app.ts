@@ -34,7 +34,15 @@ function setupSwagger(app: INestApplication) {
     .setVersion('0.0.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/docs', app, document);
+  // https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+  SwaggerModule.setup('/docs', app, document, {
+    customfavIcon: 'https://docs.nestjs.com/assets/logo-small.svg',
+    customJs: [
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.1/swagger-ui-bundle.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.1/swagger-ui-standalone-preset.min.js',
+    ],
+    customCssUrl: ['https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.1/swagger-ui.min.css'],
+  });
 }
 
 export async function createApp() {

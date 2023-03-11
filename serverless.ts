@@ -44,14 +44,17 @@ const serverlessConfiguration: AWS = {
     },
   },
 
-  plugins: ['serverless-esbuild', 'serverless-prune-plugin', 'serverless-offline'],
+  plugins: [
+    'serverless-esbuild',
+    'serverless-prune-plugin',
+    'serverless-localstack',
+    'serverless-offline',
+  ],
 
   custom: {
     esbuild: {
-      // do not minify, because it will break the swagger,
-      // sourcemap: true,
+      sourcemap: true,
       packager: 'pnpm',
-      external: ['@nestjs/swagger'],
       exclude: [
         'class-transformer/storage',
         '@nestjs/websockets',
@@ -68,6 +71,10 @@ const serverlessConfiguration: AWS = {
     },
     localstack: {
       stages: ['local'],
+    },
+    'serverless-offline': {
+      httpPort: 4567,
+      lambdaPort: 4568,
     },
   },
 };
