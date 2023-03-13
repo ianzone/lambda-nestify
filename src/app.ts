@@ -3,6 +3,7 @@ import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
 
 function setupVersioning(app: INestApplication) {
@@ -48,8 +49,11 @@ function setupSwagger(app: INestApplication) {
 }
 
 export async function createApp() {
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
+  const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
+    bufferLogs: true,
+  });
 
+  app.useLogger(app.get(Logger));
   app.enableCors();
   // @ts-ignore
   await app.register(helmet, { contentSecurityPolicy: false });
