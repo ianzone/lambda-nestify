@@ -29,10 +29,13 @@ export class AppFilter extends BaseExceptionFilter {
     let statusCode = 500;
     let message = '';
     if (exception instanceof HttpException) {
-      this.logger.warn(ctx, exception.stack);
       statusCode = exception.getStatus();
       const expRes = exception.getResponse() as any;
       message = expRes.message;
+      if (statusCode === 404) {
+        return super.catch(exception, host);
+      }
+      this.logger.warn(ctx, exception.stack);
     } else {
       // unexpected errors that need to trigger alerts
       this.logger.error(ctx, exception.stack);

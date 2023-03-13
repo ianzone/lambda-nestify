@@ -54,20 +54,21 @@ import configs from './configs';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    const swagger = ['/docs', '/docs-json', '/docs/(.*)', '/favicon.ico'];
-    consumer
-      .apply((req: any, res: any, next: any) => {
-        console.log(req.originalUrl);
-        return next();
-      })
-      .forRoutes('(.*)');
+    const mid = (req: any, res: any, next: any) => {
+      console.log(req.url);
+      return next();
+    };
+    consumer.apply(mid).forRoutes('/');
+
     // middleware are mounted in order
-    consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)'); // ClsMiddleware has to be mounted first
-    consumer.apply(LogMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
-    consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json');
+    // ClsMiddleware has to be mounted first
+    consumer.apply(ClsMiddleware, LogMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
+
     consumer
       .apply(AuthMiddleware)
-      .exclude('/', ...swagger)
+      .exclude('/$', '/docs(.*)', '/docs-json', '/favicon.ico')
       .forRoutes('(.*)');
+
+    consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json/$');
   }
 }
