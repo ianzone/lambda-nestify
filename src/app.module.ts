@@ -40,10 +40,12 @@ import configs from './configs';
         // customProps: (req, res) => ({
         //   context: 'HTTP',
         // }),
+        level: 'trace',
         transport: {
           // https://github.com/pinojs/pino-pretty
           target: 'pino-pretty',
         },
+        autoLogging: false,
       },
     }),
   ],
