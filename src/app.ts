@@ -3,7 +3,7 @@ import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from 'nestjs-pino';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { AppModule } from './app.module';
 
 function setupVersioning(app: INestApplication) {
@@ -57,6 +57,7 @@ export async function createApp() {
   app.enableCors();
   // @ts-ignore
   await app.register(helmet, { contentSecurityPolicy: false });
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   setupVersioning(app);
   setupValidation(app);

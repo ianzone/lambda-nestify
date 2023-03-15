@@ -37,9 +37,9 @@ import configs from './configs';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        customProps: (req, res) => ({
-          context: 'HTTP',
-        }),
+        // customProps: (req, res) => ({
+        //   context: 'HTTP',
+        // }),
         transport: {
           // https://github.com/pinojs/pino-pretty
           target: 'pino-pretty',
@@ -78,7 +78,7 @@ export class AppModule implements NestModule {
 
     consumer
       .apply(AuthMiddleware)
-      .exclude('/$', '/docs(.*)', '/docs-json', '/favicon.ico')
+      .exclude('/', '/docs(.*)', '/docs-json', '/favicon.ico')
       .forRoutes('(.*)');
 
     consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json/$');

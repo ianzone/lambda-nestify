@@ -24,6 +24,4 @@ https://www.youtube.com/watch?v=eE_X8Y180zs
 
 https://github.com/suwa-yuki/swagger-3.0-oauth-with-cognito
 
-add custom logger, cuz cloudwatch doesn't show colors
-
 use dynamoose https://github.com/hardyscc/nestjs-dynamoose
