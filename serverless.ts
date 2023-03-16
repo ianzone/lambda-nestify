@@ -73,8 +73,8 @@ const serverlessConfiguration: AWS = {
       stages: ['local'],
     },
     'serverless-offline': {
-      httpPort: 4567,
-      lambdaPort: 4568,
+      httpPort: 5678,
+      lambdaPort: 5679,
     },
   },
 };

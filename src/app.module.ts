@@ -8,7 +8,6 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
-import { LoggerModule } from 'nestjs-pino';
 import { AuthMiddleware, DocsMiddleware, LogMiddleware } from 'src/middlewares';
 import { RoutesModule } from 'src/routes';
 import { ServicesModule } from 'src/services';
@@ -34,19 +33,6 @@ import configs from './configs';
       load: [configs],
       isGlobal: true,
       cache: true,
-    }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        // customProps: (req, res) => ({
-        //   context: 'HTTP',
-        // }),
-        level: 'trace',
-        transport: {
-          // https://github.com/pinojs/pino-pretty
-          target: 'pino-pretty',
-        },
-        autoLogging: false,
-      },
     }),
   ],
   controllers: [AppController],
