@@ -53,6 +53,7 @@ const serverlessConfiguration: AWS = {
 
   custom: {
     esbuild: {
+      // DO NOT minify, nest relies on classnames for reflection
       sourcemap: true,
       packager: 'pnpm',
       exclude: [
