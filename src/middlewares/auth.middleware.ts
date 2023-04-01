@@ -6,66 +6,83 @@ import {
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
-import { IncomingMessage } from 'http';
-import { ClsService } from 'nestjs-cls';
-import { ClsKeys, ReqAux } from 'src/cls';
-import { Configs, Mode } from 'src/configs';
-import { TenantsService } from 'src/services';
+import { IncomingMessage, ServerResponse } from 'http';
+import { Tenant, TenantsService, UsersService } from 'src/routes';
+import { Auth, Aux, ContextService } from 'src/services';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   private readonly logger = new Logger(AuthMiddleware.name);
 
   constructor(
-    private readonly cls: ClsService,
     @Inject(CACHE_MANAGER)
     private readonly cache: Cache,
     private readonly tenants: TenantsService,
-    private readonly configs: ConfigService<Configs>
-  ) {}
+    private readonly users: UsersService,
+    private readonly ctx: ContextService,
+  ) {
+    this.logger.verbose('initialized');
+  }
 
-  // in fastify middleware, the req object is the raw node request object
   // https://www.fastify.io/docs/latest/Reference/Middleware/
-  async use(req: IncomingMessage, res: any, next: () => void) {
+  async use(req: IncomingMessage, res: ServerResponse, next: Function) {
     this.logger.verbose('');
-    if (this.configs.get('mode') === Mode.local) return next();
-
     try {
       const authorization = req.headers.authorization;
       const jwt = authorization?.split('Bearer ')[1];
       if (!jwt) throw new Error('missing authorization');
 
-      const auxDataCache = (await this.cache.get(jwt)) as any;
+      const auxDataCache = await this.cache.get<Aux>(jwt);
       if (auxDataCache) {
-        this.cls.set<ReqAux>(ClsKeys.reqAux, auxDataCache);
+        this.logger.verbose('cache hit');
+        this.ctx.auth = auxDataCache.auth;
+        this.ctx.tenant = auxDataCache.tenant;
+        this.ctx.user = auxDataCache.user;
         return next();
       }
 
       this.logger.verbose('decode jwt and get tenantId from it');
       this.logger.verbose('get tenant credentials from the tenant service');
-      await this.tenants.ormMethods('tenantId');
-      this.logger.verbose('verify the jwt against tenant credentials');
+      const tenant = await this.tenants.findOne('us-east-1_asdf');
+      this.ctx.tenant = tenant;
 
-      const auxData = {
-        user: {
-          token: jwt,
-          userPoolId: 'string',
-          clientId: 'string',
-          userId: 'userId',
-          groups: new Set(['admin']),
-        },
-        tenant: {
-          thirdPartyKey: 'thirdPartyKey',
-        },
+      this.logger.verbose('verify the jwt against tenant credentials');
+      const auth = await verify(tenant, jwt, this.ctx);
+
+      // @ts-ignore
+      if (req.originalUrl.split('/')[1] === 'users') {
+        // just pass to the users route
+        return next();
+      }
+
+      this.logger.verbose('get user details');
+      const user = await this.users.findOne('asdf');
+      this.ctx.user = user;
+
+      const auxData: Aux = {
+        auth,
+        tenant,
+        user,
       };
 
       this.cache.set(jwt, auxData);
-      this.cls.set<ReqAux>(ClsKeys.reqAux, auxData);
       return next();
     } catch (err) {
       throw new UnauthorizedException(err.message);
     }
   }
+}
+
+async function verify(tenant: Tenant, jwt: string, ctx: ContextService): Promise<Auth> {
+  const auth = {
+    token: 'the jwt token',
+    tenantId: 'us-east-asdf',
+    clientId: 'asdfasdfadsfasdf',
+    userId: 'asdf',
+    email: 'test@test.com',
+    groups: new Set(['admin']),
+  };
+  ctx.auth = auth;
+  return auth;
 }

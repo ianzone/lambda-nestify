@@ -8,7 +8,8 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
-import { AuthMiddleware, DocsMiddleware, LogMiddleware } from 'src/middlewares';
+import { DynamooseModule } from 'nestjs-dynamoose';
+import { AuthMiddleware, DocsMiddleware } from 'src/middlewares';
 import { RoutesModule } from 'src/routes';
 import { ServicesModule } from 'src/services';
 import { AppController } from './app.controller';
@@ -34,6 +35,7 @@ import configs from './configs';
       isGlobal: true,
       cache: true,
     }),
+    DynamooseModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [
@@ -62,13 +64,13 @@ export class AppModule implements NestModule {
 
     // middleware are mounted in order
     // ClsMiddleware has to be mounted first
-    consumer.apply(ClsMiddleware, LogMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
+    consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
 
     consumer
       .apply(AuthMiddleware)
-      .exclude('/', '/docs(.*)', '/docs-json', '/favicon.ico')
+      .exclude('/', '/public/(.*)', '/docs(.*)', '/docs-json', '/favicon.ico')
       .forRoutes('(.*)');
 
-    consumer.apply(DocsMiddleware).exclude('/docs/(.*)').forRoutes('/docs', '/docs-json/$');
+    consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs-json/$');
   }
 }

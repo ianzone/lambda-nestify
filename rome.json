@@ -1,0 +1,29 @@
+{
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 100,
+    "ignore": [
+      "node_modules", ".serverless", ".git", ".vscode", "dist", "build", ".esbuild", "documentation"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": [
+      "node_modules", ".serverless", ".git", ".vscode", "dist", "build", ".esbuild", "documentation"
+    ],
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": "warn"
+      },
+      "style": {
+        "useEnumInitializers": "off"
+      }
+    }
+  }
+}

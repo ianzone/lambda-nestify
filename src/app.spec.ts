@@ -21,7 +21,7 @@ describe('App (e2e)', () => {
     await app.close();
   });
 
-  it(`/ GET`, async () => {
+  it('/ GET', async () => {
     const res = await app.inject({
       method: 'GET',
       url: '/',
@@ -30,7 +30,7 @@ describe('App (e2e)', () => {
     expect(res.body).toBe('Hello World!');
   });
 
-  it(`/users GET`, async () => {
+  it('/users GET', async () => {
     const res = await app.inject({
       method: 'GET',
       url: '/users',

@@ -2,14 +2,13 @@ import { ArgumentsHost, Catch, HttpException, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ServerResponse } from 'http';
-import { ClsService } from 'nestjs-cls';
-import { ClsKeys, LogTrace, ReqAux } from './cls';
+import { ContextService } from './services';
 
 // https://docs.nestjs.com/exception-filters#exception-filters
 @Catch()
 export class AppFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(AppFilter.name);
-  constructor(private readonly cls: ClsService) {
+  constructor(private readonly ctx: ContextService) {
     super();
   }
   async catch(exception: Error, host: ArgumentsHost) {
@@ -23,7 +22,9 @@ export class AppFilter extends BaseExceptionFilter {
       Query: req.query,
       Headers: req.headers,
       Body: req.body,
-      ReqAuxData: this.cls.get<ReqAux>(ClsKeys.reqAux),
+      Auth: this.ctx.auth,
+      Tenant: this.ctx.tenant,
+      User: this.ctx.user,
     };
 
     let statusCode = 500;
@@ -42,7 +43,7 @@ export class AppFilter extends BaseExceptionFilter {
       message = exception.message;
     }
 
-    const logTrace = this.cls.get<LogTrace>(ClsKeys.logTrace);
+    const logTrace = this.ctx.trace;
 
     if (res instanceof ServerResponse) {
       // in case of thrown from middlewares, the FastifyRequest is not ready

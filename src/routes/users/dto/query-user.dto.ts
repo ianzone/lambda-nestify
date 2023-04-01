@@ -1,9 +1,4 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateUserDto } from './create-user.dto';
 
-export class QueryUserDto {
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  age?: number;
-}
+export class QueryUserDto extends PartialType(CreateUserDto) {}

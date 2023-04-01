@@ -26,7 +26,15 @@ const serverlessConfiguration: AWS = {
 
   package: {
     individually: true,
-    // patterns: ['public/**/*', 'views/**/*'],
+    patterns: [
+      'public/**/*',
+      'views/**/*',
+      'node_modules/swagger-ui-dist/swagger-ui.css',
+      'node_modules/swagger-ui-dist/swagger-ui-bundle.js',
+      'node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js',
+      'node_modules/swagger-ui-dist/favicon-16x16.png',
+      'node_modules/swagger-ui-dist/favicon-32x32.png',
+    ],
   },
 
   functions: {
@@ -61,7 +69,6 @@ const serverlessConfiguration: AWS = {
         '@nestjs/websockets',
         '@nestjs/microservices',
         '@nestjs/platform-express',
-        '@fastify/view',
       ],
     },
     prune: {
@@ -74,8 +81,8 @@ const serverlessConfiguration: AWS = {
       stages: ['local'],
     },
     'serverless-offline': {
-      httpPort: 5678,
-      lambdaPort: 5679,
+      // httpPort: 5678,
+      // lambdaPort: 5679,
     },
   },
 };

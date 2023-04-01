@@ -1,5 +1,7 @@
-export function delay(ms?: number) {
+export function delay(ms?: number, callback?: Function) {
   return new Promise((resolve) => {
-    setTimeout(resolve, ms || 1000);
+    setTimeout(() => {
+      callback(), resolve;
+    }, ms || 1000);
   });
 }
