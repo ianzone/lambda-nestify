@@ -14,39 +14,7 @@ export class MyLogger extends ConsoleLogger {
     });
   }
 
-  log(message: any, ...optionalParams: any[]) {
-    const context = optionalParams.pop();
-    if (
-      this.isLevelEnabled('log') &&
-      context !== 'RouterExplorer' &&
-      context !== 'RoutesResolver' &&
-      context !== 'NestApplication'
-    ) {
-      console.log(context, 'log');
-      console.log(message);
-      console.log();
-    }
-  }
-
-  error(message: any, ...optionalParams: any[]) {
-    if (this.isLevelEnabled('error')) {
-      const context = optionalParams.pop();
-      console.error(context, 'error');
-      console.error(message);
-      console.error();
-    }
-  }
-
-  warn(message: any, ...optionalParams: any[]) {
-    console.log(this.context);
-    if (this.isLevelEnabled('warn')) {
-      const context = optionalParams.pop();
-      console.warn(context, 'warn');
-      console.warn(message);
-      console.warn();
-    }
-  }
-
+  // level: debug -> verbose -> info -> warning -> error
   debug(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('debug')) {
       const context = optionalParams.pop();
@@ -62,6 +30,39 @@ export class MyLogger extends ConsoleLogger {
       console.info(context, 'verbose');
       console.info(message);
       console.info();
+    }
+  }
+
+  log(message: any, ...optionalParams: any[]) {
+    const context = optionalParams.pop();
+    if (
+      this.isLevelEnabled('log') &&
+      context !== 'RouterExplorer' &&
+      context !== 'RoutesResolver' &&
+      context !== 'NestApplication'
+    ) {
+      console.log(context, 'log');
+      console.log(message);
+      console.log();
+    }
+  }
+
+  warn(message: any, ...optionalParams: any[]) {
+    console.log(this.context);
+    if (this.isLevelEnabled('warn')) {
+      const context = optionalParams.pop();
+      console.warn(context, 'warn');
+      console.warn(message);
+      console.warn();
+    }
+  }
+
+  error(message: any, ...optionalParams: any[]) {
+    if (this.isLevelEnabled('error')) {
+      const context = optionalParams.pop();
+      console.error(context, 'error');
+      console.error(message);
+      console.error();
     }
   }
 }
