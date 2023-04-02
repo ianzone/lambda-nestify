@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   getHello() {
-    this.logger.verbose('getHello');
+    this.logger.verbose('getHello', 'Hello');
     return this.appService.getHello();
   }
 

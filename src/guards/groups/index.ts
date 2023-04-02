@@ -1,2 +1,2 @@
-export * from './groups.decorator'
-export * from './groups.guard'
+export * from './groups.decorator';
+export * from './groups.guard';

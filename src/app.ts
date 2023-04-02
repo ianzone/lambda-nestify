@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import hbs from 'handlebars';
 import { join, resolve } from 'path';
 import { AppModule } from './app.module';
+import { MyLogger } from './services/log/log.service';
 
 function setVersioning(app: NestFastifyApplication) {
   app.enableVersioning({
@@ -69,7 +70,9 @@ function setHBS(app: NestFastifyApplication) {
 export async function createApp() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
     cors: true,
+    logger: false,
   });
+  app.useLogger(app.get(MyLogger));
 
   await app.register(helmet, { contentSecurityPolicy: false });
 

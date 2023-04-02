@@ -15,7 +15,7 @@ async function bootstrap(): Promise<Handler> {
 export const handler: Handler = async (
   event: APIGatewayProxyEvent,
   context: Context,
-  callback: Callback
+  callback: Callback,
 ) => {
   cachedServer = cachedServer ?? (await bootstrap());
   return cachedServer(event, context, callback);

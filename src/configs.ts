@@ -1,3 +1,5 @@
+import { LogLevel } from '@nestjs/common';
+
 export default (): Configs => {
   const isOffline = process.env.NODE_ENV === 'dev' || process.env.IS_OFFLINE === 'true';
   const baseUrl = isOffline ? 'http://localhost:30000' : 'https://service.my-domain.com';
@@ -6,6 +8,7 @@ export default (): Configs => {
     baseUrl: `${baseUrl}${stagePath}`,
     mode: Mode.dev,
     stagePath,
+    logLevel: ['verbose'],
   };
 };
 
@@ -13,6 +16,7 @@ export interface Configs {
   baseUrl: string;
   mode: Mode;
   stagePath: string;
+  logLevel: LogLevel[];
 }
 
 export enum Mode {

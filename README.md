@@ -23,5 +23,3 @@ https://www.youtube.com/watch?v=H7U1lv354AU
 https://www.youtube.com/watch?v=eE_X8Y180zs
 
 https://github.com/suwa-yuki/swagger-3.0-oauth-with-cognito
-
-use dynamoose https://github.com/hardyscc/nestjs-dynamoose
