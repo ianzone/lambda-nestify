@@ -1,10 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { ContextService } from './context/context.service';
-import { MyLogger } from './log/log.service';
+import { LogService } from './log/log.service';
 
 @Global()
 @Module({
-  providers: [ContextService, MyLogger],
-  exports: [ContextService, MyLogger],
+  providers: [ContextService, LogService],
+  exports: [ContextService, LogService],
 })
 export class ServicesModule {}

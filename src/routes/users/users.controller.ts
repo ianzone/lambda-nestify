@@ -17,6 +17,7 @@ import { UsersService } from './users.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()
+@Groups(Group.admin)
 @UseGuards(GroupsGuard)
 @Controller('users')
 export class UsersController {
@@ -25,13 +26,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() body: CreateUserDto) {
+  create(@Body() body: CreateUserDto) {
     return this.usersService.create(body);
   }
 
-  @Groups(Group.admin)
   @Get()
-  async findAll(@Query() query: QueryUserDto) {
+  findAll(@Query() query: QueryUserDto) {
     return this.usersService.findAll();
   }
 
@@ -45,7 +45,6 @@ export class UsersController {
     return this.usersService.update(id, body);
   }
 
-  @Groups(Group.admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);

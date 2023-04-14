@@ -1,16 +1,11 @@
-import {
-  CacheInterceptor,
-  CacheModule,
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { DynamooseModule } from 'nestjs-dynamoose';
 import { AuthMiddleware, DocsMiddleware } from 'src/middlewares';
-import { RoutesModule } from 'src/routes';
+import { RoutesModule, UsersController } from 'src/routes';
 import { ServicesModule } from 'src/services';
 import { AppController } from './app.controller';
 import { AppFilter } from './app.filter';
@@ -22,6 +17,9 @@ import configs from './configs';
   imports: [
     ClsModule.forRoot({
       global: true,
+      middleware: { // the ClsMiddleware is mounted below
+        generateId: true,
+      },
     }),
     CacheModule.register({
       isGlobal: true,
@@ -66,11 +64,8 @@ export class AppModule implements NestModule {
     // ClsMiddleware has to be mounted first
     consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
 
-    consumer
-      .apply(AuthMiddleware)
-      .exclude('/', '/public/(.*)', '/docs(.*)', '/docs-json', '/favicon.ico')
-      .forRoutes('(.*)');
+    consumer.apply(AuthMiddleware).exclude().forRoutes(UsersController);
 
-    consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs-json/$');
+    consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs-json');
   }
 }

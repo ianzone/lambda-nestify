@@ -1,32 +1,34 @@
 import { CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { Configs, Mode } from 'src/configs';
+import { FastifyRequest } from 'fastify';
 import { ContextService } from 'src/services';
 import { GROUPS_KEY, Group } from './groups.decorator';
 
 @Injectable()
 export class GroupsGuard implements CanActivate {
   private readonly logger = new Logger(GroupsGuard.name);
-  constructor(
-    private readonly ctx: ContextService,
-    private readonly reflector: Reflector,
-    private readonly configs: ConfigService<Configs>,
-  ) {}
+  constructor(private readonly ctx: ContextService, private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    if (this.configs.get('mode') === Mode.local) return true;
+    const requiredGroups = this.reflector.getAllAndOverride<Group[]>(GROUPS_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    this.logger.debug({ requiredGroups });
 
-    const groupsSetInController = this.reflector.get<Group[]>(GROUPS_KEY, context.getHandler());
-    this.logger.verbose({ groupsSetInController });
+    const req = context.switchToHttp().getRequest<FastifyRequest>();
 
-    if (groupsSetInController?.length) {
+    if (requiredGroups?.length) {
       const auth = this.ctx.auth;
-      this.logger.verbose({ auth });
-      const groups = auth.groups;
-      if (groups.size) {
-        for (const group of groupsSetInController) {
-          if (groups.has(group)) return true;
+      // @ts-ignore
+      if (auth.userId === req.params?.id) {
+        // allow self usage
+        return true;
+      }
+      this.logger.debug({ groups: auth.groups });
+      if (auth.groups.length) {
+        for (const group of requiredGroups) {
+          if (auth.groups.includes(group)) return true;
         }
       }
       return false;

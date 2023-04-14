@@ -1,3 +1,7 @@
+/*
+https://docs.nestjs.com/interceptors#interceptors
+*/
+
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
 import { Context } from 'aws-lambda';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -26,17 +30,18 @@ export class AppInterceptor implements NestInterceptor {
       requestId: cxt?.awsRequestId,
     };
 
-    this.logger.verbose(`Request intercepted: ${cxt?.awsRequestId}`);
-    this.logger.verbose(
+    this.logger.debug(`awsRequestId: ${cxt?.awsRequestId}`);
+    this.logger.debug(
       `${method} ${url} ${userAgent} ${ip}: ${context.getClass().name} ${
         context.getHandler().name
       } invoked...`,
     );
     return next.handle().pipe(
       tap(() => {
-        this.logger.verbose(`Response intercepted: ${cxt?.awsRequestId}`);
-
-        this.logger.verbose(`Response time: ${res.getResponseTime()}`);
+        this.logger.debug(`Response time: ${res.getResponseTime()}`);
+        this.logger.debug(
+          '========================================================================================================================',
+        );
       }),
     );
   }

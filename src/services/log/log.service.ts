@@ -4,13 +4,13 @@ import { Configs } from 'src/configs';
 import { ContextService } from '../context/context.service';
 
 @Injectable()
-export class MyLogger extends ConsoleLogger {
+export class LogService extends ConsoleLogger {
   constructor(
     private readonly ctx: ContextService,
-    private readonly configs: ConfigService<Configs>,
+    private readonly configs: ConfigService<Configs, true>,
   ) {
     super('', {
-      logLevels: configs.get<Configs['logLevel']>('logLevel'),
+      logLevels: configs.get('logLevel'),
     });
   }
 
@@ -18,7 +18,7 @@ export class MyLogger extends ConsoleLogger {
   debug(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('debug')) {
       const context = optionalParams.pop();
-      console.debug(context, 'debug');
+      console.debug(context, 'DEBUG');
       console.debug(message);
       console.debug();
     }
@@ -27,7 +27,7 @@ export class MyLogger extends ConsoleLogger {
   verbose(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('verbose')) {
       const context = optionalParams.pop();
-      console.info(context, 'verbose');
+      console.info(context, 'VERBOSE');
       console.info(message);
       console.info();
     }
@@ -41,7 +41,7 @@ export class MyLogger extends ConsoleLogger {
       context !== 'RoutesResolver' &&
       context !== 'NestApplication'
     ) {
-      console.log(context, 'log');
+      console.log(context, 'LOG');
       console.log(message);
       console.log();
     }
@@ -51,7 +51,7 @@ export class MyLogger extends ConsoleLogger {
     console.log(this.context);
     if (this.isLevelEnabled('warn')) {
       const context = optionalParams.pop();
-      console.warn(context, 'warn');
+      console.warn(context, 'WARN');
       console.warn(message);
       console.warn();
     }
@@ -60,7 +60,7 @@ export class MyLogger extends ConsoleLogger {
   error(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('error')) {
       const context = optionalParams.pop();
-      console.error(context, 'error');
+      console.error(context, 'ERROR');
       console.error(message);
       console.error();
     }

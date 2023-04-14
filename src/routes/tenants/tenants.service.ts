@@ -1,47 +1,37 @@
-import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel, Model } from 'nestjs-dynamoose';
-import { settings } from 'src/configs';
-import { ContextService } from 'src/services';
+import { mock } from 'src/configs';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
-import { Tenant } from './entities/tenant.entity';
+import { Tenant } from './schemas/tenant.schema';
 
 @Injectable()
 export class TenantsService {
   private readonly logger = new Logger(TenantsService.name);
   constructor(
-    @Inject(CACHE_MANAGER)
-    private readonly cache: Cache,
-    @InjectModel(settings.tenantsTable)
+    @InjectModel('tenants')
     private tenants: Model<Tenant, { id: string }>,
-    private readonly ctx: ContextService,
   ) {}
 
-  create(createTenantDto: CreateTenantDto) {
-    return 'This action adds a new tenant';
+  create(body: CreateTenantDto) {
+    // TODO: unit test
+    return this.tenants.create(body, { overwrite: true, return: 'item' });
   }
 
   findAll() {
-    if (settings.mock) {
-      return [mock];
+    // TODO: unit test
+    if (mock.enable) {
+      return [mock.tenant];
     }
-    const auth = this.ctx.auth;
-    return this.tenants.query('id').eq(auth.tenantId).exec();
+    return this.tenants.scan().exec();
   }
 
-  async findOne(id: string): Promise<Tenant> {
-    if (settings.mock) {
-      return mock;
+  findOne(id: string) {
+    // TODO: unit test
+    if (mock.enable) {
+      return mock.tenant;
     }
-    const cacheKey = `TenantsServiceFindOne${id}`;
-    let tenant = await this.cache.get<Tenant>(cacheKey);
-    if (!tenant) {
-      this.logger.verbose('fetch tenant');
-      tenant = await this.tenants.get({ id });
-      this.cache.set(cacheKey, tenant);
-    }
-    return tenant;
+    return this.tenants.get({ id });
   }
 
   update(id: string, updateTenantDto: UpdateTenantDto) {
@@ -49,15 +39,7 @@ export class TenantsService {
   }
 
   remove(id: string) {
+    // TODO: unit test
     return this.tenants.delete({ id });
   }
 }
-
-const mock: Tenant = {
-  id: '',
-  name: '',
-  clientId: [''],
-  sdk: {
-    key: '',
-  },
-};

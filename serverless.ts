@@ -1,11 +1,13 @@
 import type { AWS } from '@serverless/typescript';
 
 const serverlessConfiguration: AWS = {
-  app: 'roomzz',
-  service: 'booking',
+  app: 'demo',
+  service: 'service',
 
   frameworkVersion: '3',
   configValidationMode: 'error',
+  deprecationNotificationMode: 'error',
+  useDotenv: true,
 
   provider: {
     name: 'aws',
@@ -17,10 +19,33 @@ const serverlessConfiguration: AWS = {
       project: '${self:app}',
       service: '${self:service}',
     },
+    iam: {
+      role: {
+        statements: [
+          {
+            Effect: 'Allow',
+            Action: 'dynamodb:*',
+            Resource: '*',
+          },
+        ],
+      },
+    },
     logRetentionInDays: 60,
     environment: {
       STAGE_PATH: '/${sls:stage}',
       NODE_OPTIONS: '--enable-source-maps',
+      DOMAIN: '${param:domain}',
+      tenantsTable: '${param:tenantsTable}',
+      usersTable: '${param:usersTable}',
+      DEV_PORT: '${env:DEV_PORT}',
+    },
+  },
+
+  params: {
+    default: {
+      domain: 'my-service.my-domain.net',
+      tenantsTable: '${self:app}-${self:service}-tenants-${sls:stage}',
+      usersTable: '${self:app}-${self:service}-users-${sls:stage}',
     },
   },
 
@@ -57,6 +82,7 @@ const serverlessConfiguration: AWS = {
     'serverless-prune-plugin',
     'serverless-localstack',
     'serverless-offline',
+    'serverless-domain-manager',
   ],
 
   custom: {
@@ -81,8 +107,15 @@ const serverlessConfiguration: AWS = {
       stages: ['local'],
     },
     'serverless-offline': {
-      // httpPort: 5678,
+      httpPort: '${env:DEV_PORT}',
       // lambdaPort: 5679,
+    },
+    customDomain: {
+      // https://github.com/amplify-education/serverless-domain-manager
+      domainName: '${param:domain}',
+      certificateName: 'roomzz.net',
+      basePath: '${sls:stage}',
+      autoDomain: true,
     },
   },
 };

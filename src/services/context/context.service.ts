@@ -41,12 +41,13 @@ export interface Auth {
   clientId: string;
   userId: string;
   email: string;
-  groups: Set<string>;
+  name: string;
+  groups: string[];
 }
 interface LogTrace {
-  groupId: string;
-  streamId: string;
-  requestId: string;
+  groupId: string | undefined;
+  streamId: string | undefined;
+  requestId: string | undefined;
 }
 export interface Aux {
   auth: Auth;

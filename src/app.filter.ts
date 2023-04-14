@@ -45,6 +45,10 @@ export class AppFilter extends BaseExceptionFilter {
 
     const logTrace = this.ctx.trace;
 
+    this.logger.debug(
+      '========================================================================================================================',
+    );
+
     if (res instanceof ServerResponse) {
       // in case of thrown from middlewares, the FastifyRequest is not ready
       res.writeHead(statusCode, { 'Content-Type': 'application/json' });

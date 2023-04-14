@@ -16,19 +16,22 @@ export class DocsMiddleware implements NestMiddleware {
       'favicon-16x16.png',
       'favicon-32x32.png',
     ];
-    const file = filter.find((e) => req.url.includes(e));
+    const url = req?.url || '';
+    const file = filter.find((e) => url.includes(e));
     if (file) {
-      res.writeHead(301, { Location: `${this.configs.get('stagePath')}/public/${file}` });
+      res.writeHead(301, {
+        Location: `${this.configs.get('basePath')}/public/${file}`,
+      });
       res.end();
       return next();
     }
-    if (req.url.includes('swagger-ui-init.js')) {
+    if (url.includes('swagger-ui-init.js')) {
       return next();
     }
-    this.logger.verbose('');
-    const { token } = parse(req.url.split('?')[1]);
-    this.logger.verbose(`docs access token: ${token}`);
-    if (!token) {
+    this.logger.debug('');
+    const { token } = parse(url.split('?')[1]);
+    this.logger.debug(`docs access token: ${token}`);
+    if (token !== 'Secure_2023') {
       throw new UnauthorizedException();
     }
     return next();
