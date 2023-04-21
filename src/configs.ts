@@ -1,6 +1,4 @@
 import { LogLevel } from '@nestjs/common';
-import { Tenant, User } from './routes';
-import { Auth } from './services';
 
 export default (): Configs => {
   const isOffline = process.env.NODE_ENV === 'dev' || process.env.IS_OFFLINE === 'true';
@@ -35,38 +33,9 @@ export interface Configs {
   logLevel: LogLevel[];
 }
 
-const auth: Auth = {
-  token: 'jwt access token',
-  tenantId: 'userPoolId',
-  clientId: 'clientId',
-  userId: 'cognitoSub',
-  email: 'yiheng.work@gmail.com',
-  name: 'Yiheng',
-  groups: ['admin'],
-};
-const user: User = {
-  tenantId: '',
-  id: '',
-  email: '',
-  name: '',
-};
-const tenant: Tenant = {
-  id: '',
-  name: '',
-  clientId: [''],
-  url: {
-    apps: '',
-    portal: '',
-    terms: '',
-    privacy: '',
-  },
-  sdk: {
-    key: '',
-  },
-};
-
+import { auth, tenant, user } from './mock';
 export const mock = {
-  enable: false,
+  enable: true,
   user,
   tenant,
   auth,

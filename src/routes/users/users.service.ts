@@ -16,6 +16,10 @@ export class UsersService {
   ) {}
 
   create(body: CreateUserDto) {
+    return this.users.create(body);
+  }
+
+  overwrite(body: CreateUserDto) {
     return this.users.create(body, { overwrite: true, return: 'item' });
   }
 

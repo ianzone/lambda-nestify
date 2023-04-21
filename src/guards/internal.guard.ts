@@ -8,7 +8,7 @@ export class InternalGuard implements CanActivate {
 
     const token = req?.headers?.authorization?.split('Bearer ')[1];
 
-    if (token === 'asdf') {
+    if (token === 'Secure_2023') {
       return true;
     } else {
       return false;

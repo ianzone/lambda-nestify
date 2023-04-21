@@ -6,6 +6,7 @@
     "dist",
     "**/*spec.ts",
     "serverless.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "main.ts"
   ]
 }

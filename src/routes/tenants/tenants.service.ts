@@ -15,6 +15,11 @@ export class TenantsService {
 
   create(body: CreateTenantDto) {
     // TODO: unit test
+    return this.tenants.create(body);
+  }
+
+  overwrite(body: CreateTenantDto) {
+    // TODO: unit test
     return this.tenants.create(body, { overwrite: true, return: 'item' });
   }
 

@@ -21,11 +21,16 @@ const serverlessConfiguration: AWS = {
     },
     iam: {
       role: {
+        // https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html
         statements: [
+          // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_statement.html
           {
             Effect: 'Allow',
-            Action: 'dynamodb:*',
-            Resource: '*',
+            Action: ['dynamodb:Scan', 'dynamodb:Query', 'dynamodb:*Item'],
+            Resource: [
+              { 'Fn::GetAtt': ['TenantsTable', 'Arn'] },
+              { 'Fn::GetAtt': ['UsersTable', 'Arn'] },
+            ],
           },
         ],
       },
@@ -43,7 +48,7 @@ const serverlessConfiguration: AWS = {
 
   params: {
     default: {
-      domain: 'my-service.my-domain.net',
+      domain: 'demo-service.tin.info',
       tenantsTable: '${self:app}-${self:service}-tenants-${sls:stage}',
       usersTable: '${self:app}-${self:service}-users-${sls:stage}',
     },
@@ -91,6 +96,7 @@ const serverlessConfiguration: AWS = {
       sourcemap: true,
       packager: 'pnpm',
       exclude: [
+        '@fastify/view',
         'class-transformer/storage',
         '@nestjs/websockets',
         '@nestjs/microservices',
@@ -113,9 +119,70 @@ const serverlessConfiguration: AWS = {
     customDomain: {
       // https://github.com/amplify-education/serverless-domain-manager
       domainName: '${param:domain}',
-      certificateName: 'roomzz.net',
+      certificateName: 'tin.info',
       basePath: '${sls:stage}',
       autoDomain: true,
+    },
+  },
+
+  resources: {
+    Resources: {
+      TenantsTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          TableName: '${param:tenantsTable}',
+          AttributeDefinitions: [
+            {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'id',
+              KeyType: 'HASH',
+            },
+          ],
+          ProvisionedThroughput: {
+            // https://www.serverless.com/blog/dynamodb-on-demand-serverless
+            // https://github.com/ACloudGuru/serverless-plugin-dynamo-autoscaling
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
+      UsersTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          TableName: '${param:usersTable}',
+          AttributeDefinitions: [
+            {
+              AttributeName: 'tenantId',
+              AttributeType: 'S',
+            },
+            {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'tenantId',
+              KeyType: 'HASH',
+            },
+            {
+              AttributeName: 'id',
+              KeyType: 'RANGE',
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
     },
   },
 };

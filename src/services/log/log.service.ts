@@ -18,18 +18,14 @@ export class LogService extends ConsoleLogger {
   debug(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('debug')) {
       const context = optionalParams.pop();
-      console.debug(context, 'DEBUG');
-      console.debug(message);
-      console.debug();
+      console.debug(context, 'DEBUG', JSON.stringify(message, null, 2), ...optionalParams);
     }
   }
 
   verbose(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('verbose')) {
       const context = optionalParams.pop();
-      console.info(context, 'VERBOSE');
-      console.info(message);
-      console.info();
+      console.info(context, 'VERBOSE', JSON.stringify(message, null, 2), ...optionalParams);
     }
   }
 
@@ -41,28 +37,21 @@ export class LogService extends ConsoleLogger {
       context !== 'RoutesResolver' &&
       context !== 'NestApplication'
     ) {
-      console.log(context, 'LOG');
-      console.log(message);
-      console.log();
+      console.log(context, 'LOG', JSON.stringify(message, null, 2), ...optionalParams);
     }
   }
 
   warn(message: any, ...optionalParams: any[]) {
-    console.log(this.context);
     if (this.isLevelEnabled('warn')) {
       const context = optionalParams.pop();
-      console.warn(context, 'WARN');
-      console.warn(message);
-      console.warn();
+      console.warn(context, 'WARN', JSON.stringify(message, null, 2), ...optionalParams);
     }
   }
 
   error(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('error')) {
       const context = optionalParams.pop();
-      console.error(context, 'ERROR');
-      console.error(message);
-      console.error();
+      console.error(context, 'ERROR', JSON.stringify(message, null, 2), ...optionalParams);
     }
   }
 }

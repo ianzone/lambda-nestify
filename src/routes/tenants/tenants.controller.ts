@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { InternalGuard } from 'src/guards';
 import { CreateTenantDto } from './dto/create-tenant.dto';
@@ -15,6 +15,11 @@ export class TenantsController {
   @Post()
   create(@Body() body: CreateTenantDto) {
     return this.tenantsService.create(body);
+  }
+
+  @Put()
+  overwrite(@Body() body: CreateTenantDto) {
+    return this.tenantsService.overwrite(body);
   }
 
   @Get()

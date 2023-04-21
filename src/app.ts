@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import hbs from 'handlebars';
 import { join, resolve } from 'path';
 import { LogService } from 'src/services';
 import { AppModule } from './app.module';
@@ -46,30 +45,25 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
       description: 'Please enter your Cognito accessToken',
     })
     .setVersion('0.0.0')
+    .addTag('Resources', 'Business logic endpoints')
     .addTag(
       'Tenants',
-      `this is for internal use, the bearer token is static, data stored in DynamoDB <b>${configService.get(
+      `For internal use, using static bearer token, data are stored in DynamoDB <b>${configService.get(
         'tenantsTable',
       )}</b>`,
     )
-    .addTag('Users', `nylas users, stored in DynamoDB <b>${configService.get('usersTable')}</b>`)
+    .addTag('Users', `Service users, stored in DynamoDB <b>${configService.get('usersTable')}</b>`)
     .build();
   const document = SwaggerModule.createDocument(app, config);
   // https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
   SwaggerModule.setup('/docs', app, document, {});
 }
 
-function setHBS(app: NestFastifyApplication) {
+function setAssets(app: NestFastifyApplication) {
   const dir = resolve();
   app.useStaticAssets({
     root: [join(dir, 'public'), join(dir, 'node_modules', 'swagger-ui-dist')],
     prefix: '/public/',
-  });
-  app.setViewEngine({
-    engine: {
-      handlebars: hbs,
-    },
-    templates: join(dir, 'views'),
   });
 }
 
@@ -89,7 +83,7 @@ export async function createApp() {
 
   await app.register(helmet, { contentSecurityPolicy: false });
 
-  setHBS(app);
+  setAssets(app);
   setVersioning(app);
   setValidation(app);
   setSwagger(app, configService);

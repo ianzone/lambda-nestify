@@ -5,7 +5,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { DynamooseModule } from 'nestjs-dynamoose';
 import { AuthMiddleware, DocsMiddleware } from 'src/middlewares';
-import { RoutesModule, UsersController } from 'src/routes';
+import { ResourcesController, RoutesModule, UsersController } from 'src/routes';
 import { ServicesModule } from 'src/services';
 import { AppController } from './app.controller';
 import { AppFilter } from './app.filter';
@@ -64,7 +64,7 @@ export class AppModule implements NestModule {
     // ClsMiddleware has to be mounted first
     consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');
 
-    consumer.apply(AuthMiddleware).exclude().forRoutes(UsersController);
+    consumer.apply(AuthMiddleware).exclude().forRoutes(UsersController, ResourcesController);
 
     consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs-json');
   }
