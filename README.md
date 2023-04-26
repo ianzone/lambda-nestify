@@ -1,14 +1,13 @@
 # Get start
 
 ```
+mv .env.example .env
 pnpm i -g @antfu/ni @nestjs/cli
 ni
 nr dev
 ```
 
-dev server port can be changed in vite.config.ts
-
-serverless-offline port can be changed in serverless.ts
+port can be changed in .env
 
 see package.json for more scripts
 

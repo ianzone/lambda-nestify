@@ -16,7 +16,7 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly tenants: TenantsService,
     private readonly users: UsersService,
     private readonly ctx: ContextService,
-  ) {}
+  ) { }
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
   async use(req: IncomingMessage, res: ServerResponse, next: Function) {
@@ -67,7 +67,7 @@ export class AuthMiddleware implements NestMiddleware {
 
       this.cache.set(jwt, auxData);
       return next();
-    } catch (err) {
+    } catch (err: any) {
       throw new UnauthorizedException(err.message);
     }
   }

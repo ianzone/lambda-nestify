@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Head, Param, Patch, Post, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
@@ -8,7 +8,7 @@ import { ResourcesService } from './resources.service';
 @ApiBearerAuth()
 @Controller('resources')
 export class ResourcesController {
-  constructor(private readonly resourcesService: ResourcesService) {}
+  constructor(private readonly resourcesService: ResourcesService) { }
 
   @Post()
   create(@Body() body: CreateResourceDto) {
@@ -23,6 +23,11 @@ export class ResourcesController {
   @Get()
   findAll() {
     return this.resourcesService.findAll();
+  }
+
+  @Head(':id')  //NOTE - The Head method must be defined before the Get method
+  checkOne(@Param('id') id: string) {
+    return this.resourcesService.checkOne(id);
   }
 
   @Get(':id')

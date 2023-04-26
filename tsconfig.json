@@ -1,21 +1,18 @@
 {
+  // https://www.typescriptlang.org/tsconfig
+  "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
+    // Modules
+    "baseUrl": ".",
+    // Output
+    "outDir": "dist",
+    "sourceMap": true,
+    "incremental": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    // Type Checking
+    "strictPropertyInitialization": false,
+    "noFallthroughCasesInSwitch": true
+  },
 }

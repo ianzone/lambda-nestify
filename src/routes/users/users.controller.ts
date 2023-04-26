@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Head,
   Logger,
   Param,
   Patch,
@@ -24,7 +25,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   create(@Body() body: CreateUserDto) {
@@ -39,6 +40,11 @@ export class UsersController {
   @Get()
   findAll(@Query() query: QueryUserDto) {
     return this.usersService.findAll();
+  }
+
+  @Head(':id')
+  checkOne(@Param('id') id: string) {
+    return this.usersService.checkOne(id);
   }
 
   @Get(':id')

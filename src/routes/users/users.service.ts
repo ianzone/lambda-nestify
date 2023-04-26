@@ -13,7 +13,7 @@ export class UsersService {
     @InjectModel('users')
     private users: Model<User, { id: string; tenantId: string }>,
     private readonly ctx: ContextService,
-  ) {}
+  ) { }
 
   create(body: CreateUserDto) {
     return this.users.create(body);
@@ -30,6 +30,20 @@ export class UsersService {
     }
     const auth = this.ctx.auth;
     return this.users.query('tenantId').eq(auth.tenantId).exec();
+  }
+
+  checkOne(id: string) {
+    if (mock.enable) {
+      return mock.user;
+    }
+    const auth = this.ctx.auth;
+    return this.users.get(
+      { id, tenantId: auth.tenantId },
+      {
+        return: 'item',
+        attributes: [],
+      },
+    );
   }
 
   findOne(id: string) {

@@ -8,6 +8,9 @@ import { mock } from 'src/configs';
 import { Auth } from 'src/services';
 
 export async function verify(jwt: string): Promise<Auth> {
+  if (mock.enable) {
+    return mock.auth;
+  }
   const attr = await getUser(jwt);
 
   // decode jwt and get tenantId from it
@@ -22,9 +25,6 @@ export async function verify(jwt: string): Promise<Auth> {
     name: attr.name,
     groups: decode['cognito:groups'] || [],
   };
-  if (mock.enable) {
-    return mock.auth;
-  }
   return auth;
 }
 
@@ -34,7 +34,7 @@ async function getUser(accessToken: string) {
   const data = await new CognitoIdentityProviderClient({}).send(command);
   const attrs = data.UserAttributes || [];
   let email_verified;
-  let email;
+  let email = '';
   let firstName;
   let lastName;
   for (const item of attrs) {
@@ -42,7 +42,7 @@ async function getUser(accessToken: string) {
       email_verified = item.Value;
     }
     if (item.Name === 'email') {
-      email = item.Value;
+      email = item.Value as string;
     }
     if (item.Name === 'custom:FirstName') {
       firstName = item.Value;

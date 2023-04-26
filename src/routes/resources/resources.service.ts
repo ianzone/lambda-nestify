@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 
@@ -14,6 +14,12 @@ export class ResourcesService {
 
   findAll() {
     return 'This action returns all resources';
+  }
+
+  checkOne(id: string) {
+    if (id !== 'asdf') {
+      throw new NotFoundException
+    }
   }
 
   findOne(id: string) {
