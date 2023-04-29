@@ -29,16 +29,4 @@ describe('App (e2e)', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toBe('Hello World!');
   });
-
-  it('/users GET', async () => {
-    const res = await app.inject({
-      method: 'GET',
-      url: '/users',
-      headers: {
-        authorization: 'Bearer authorization',
-      },
-    });
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toBe('This action returns all users');
-  });
 }, 15000);

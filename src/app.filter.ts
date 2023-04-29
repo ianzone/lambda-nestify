@@ -34,7 +34,7 @@ export class AppFilter extends BaseExceptionFilter {
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       const expRes = exception.getResponse() as any;
-      message = expRes.message;
+      message = expRes?.message;
       if (statusCode === 404) {
         super.catch(exception, host);
         return;
