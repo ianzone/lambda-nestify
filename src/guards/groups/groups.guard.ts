@@ -8,7 +8,7 @@ import { GROUPS_KEY, Group } from './groups.decorator';
 export class GroupsGuard implements CanActivate {
   private readonly logger = new Logger(GroupsGuard.name);
 
-  constructor(private readonly ctx: ContextService, private readonly reflector: Reflector) { }
+  constructor(private readonly ctx: ContextService, private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
     const requiredGroups = this.reflector.getAllAndOverride<Group[]>(GROUPS_KEY, [
@@ -36,6 +36,5 @@ export class GroupsGuard implements CanActivate {
       return false;
     }
     return true;
-
   }
 }

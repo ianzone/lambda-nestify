@@ -9,11 +9,8 @@
     "deploy:prod": "nest build && sls deploy --stage prod",
     "test": "vitest --run",
     "docs": "compodoc -p tsconfig.doc.json -s",
-    "format": "rome format .",
-    "format:fix": "rome format . --write",
-    "lint": "rome check .",
-    "lint:fix": "rome check . --apply",
-    "lint:fix:suggested": "rome check . --apply-suggested"
+    "format": "prettier src --write --ignore-unknown",
+    "lint": "eslint src --ext .ts"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.321.1",

@@ -34,15 +34,15 @@ export class AppInterceptor implements NestInterceptor {
     this.logger.debug(
       `${method} ${url} ${userAgent} ${ip}: ${context.getClass().name} ${
         context.getHandler().name
-      } invoked...`,
+      } invoked...`
     );
     return next.handle().pipe(
       tap(() => {
         this.logger.debug(`Response time: ${res.getResponseTime()}`);
         this.logger.debug(
-          '========================================================================================================================',
+          '========================================================================================================================'
         );
-      }),
+      })
     );
   }
 }

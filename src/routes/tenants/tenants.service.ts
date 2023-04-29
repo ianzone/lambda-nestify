@@ -11,8 +11,8 @@ export class TenantsService {
 
   constructor(
     @InjectModel('tenants')
-    private tenants: Model<Tenant, { id: string }>,
-  ) { }
+    private tenants: Model<Tenant, { id: string }>
+  ) {}
 
   create(body: CreateTenantDto) {
     // TODO: unit test

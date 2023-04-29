@@ -14,8 +14,8 @@ export class UsersService {
   constructor(
     @InjectModel('users')
     private users: Model<User, { id: string; tenantId: string }>,
-    private readonly ctx: ContextService,
-  ) { }
+    private readonly ctx: ContextService
+  ) {}
 
   create(body: CreateUserDto) {
     return this.users.create(body);
@@ -32,9 +32,12 @@ export class UsersService {
     }
     const { auth } = this.ctx;
 
-    const res = this.users.query()
-      .filter('tenantId').eq(auth.tenantId)
-      .filter('name').contains(query.name)
+    const res = this.users
+      .query()
+      .filter('tenantId')
+      .eq(auth.tenantId)
+      .filter('name')
+      .contains(query.name)
       .exec();
 
     return res;
@@ -50,7 +53,7 @@ export class UsersService {
       {
         return: 'item',
         attributes: [],
-      },
+      }
     );
   }
 

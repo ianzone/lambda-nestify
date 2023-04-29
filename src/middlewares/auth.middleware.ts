@@ -15,8 +15,8 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly cache: Cache,
     private readonly tenants: TenantsService,
     private readonly users: UsersService,
-    private readonly ctx: ContextService,
-  ) { }
+    private readonly ctx: ContextService
+  ) {}
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
   async use(req: IncomingMessage, res: ServerResponse, next: () => void) {

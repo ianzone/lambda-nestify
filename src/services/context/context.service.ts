@@ -4,7 +4,7 @@ import { Tenant, User } from 'src/routes';
 
 @Injectable()
 export class ContextService {
-  constructor(private readonly cls: ClsService) { }
+  constructor(private readonly cls: ClsService) {}
 
   get auth(): Auth {
     return this.cls.get<Auth>('auth');

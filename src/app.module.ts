@@ -17,7 +17,8 @@ import configs from './configs';
   imports: [
     ClsModule.forRoot({
       global: true,
-      middleware: { // the ClsMiddleware is mounted below
+      middleware: {
+        // the ClsMiddleware is mounted below
         generateId: true,
       },
     }),

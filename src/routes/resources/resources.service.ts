@@ -18,7 +18,7 @@ export class ResourcesService {
 
   checkOne(id: string) {
     if (id !== 'asdf') {
-      throw new NotFoundException
+      throw new NotFoundException();
     }
   }
 

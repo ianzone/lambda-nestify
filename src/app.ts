@@ -23,7 +23,7 @@ function setValidation(app: NestFastifyApplication) {
         enableImplicitConversion: true,
         exposeUnsetFields: false,
       },
-    }),
+    })
   );
 }
 
@@ -36,7 +36,7 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
     .setDescription(
       `<p>Source code: <a href="https://github.com/ianzone/lambda-nestify" target="_blank">https://github.com/ianzone/lambda-nestify</a></p>
       <p>Endpoint base url: <b>${baseUrl}</b><p>
-      <p>Import swagger JSON from <a href="${swaggerJson}" target="_blank">${swaggerJson}</a></p>`,
+      <p>Import swagger JSON from <a href="${swaggerJson}" target="_blank">${swaggerJson}</a></p>`
     )
     .addServer(configService.get('basePath'))
     .addBearerAuth({
@@ -49,8 +49,8 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
     .addTag(
       'Tenants',
       `For internal use, using static bearer token, data are stored in DynamoDB <b>${configService.get(
-        'tenantsTable',
-      )}</b>`,
+        'tenantsTable'
+      )}</b>`
     )
     .addTag('Users', `Service users, stored in DynamoDB <b>${configService.get('usersTable')}</b>`)
     .build();

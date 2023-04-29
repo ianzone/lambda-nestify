@@ -7,7 +7,7 @@ import { ContextService } from '../context/context.service';
 export class LogService extends ConsoleLogger {
   constructor(
     private readonly ctx: ContextService,
-    private readonly configs: ConfigService<Configs, true>,
+    private readonly configs: ConfigService<Configs, true>
   ) {
     super('', {
       logLevels: configs.get('logLevel'),

@@ -8,7 +8,7 @@ import { Configs } from 'src/configs';
 export class DocsMiddleware implements NestMiddleware {
   private readonly logger = new Logger(DocsMiddleware.name);
 
-  constructor(private readonly configs: ConfigService<Configs>) { }
+  constructor(private readonly configs: ConfigService<Configs>) {}
 
   use(req: IncomingMessage, res: ServerResponse, next: () => void) {
     const filter = [

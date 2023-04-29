@@ -12,6 +12,5 @@ export class InternalGuard implements CanActivate {
       return true;
     }
     return false;
-
   }
 }

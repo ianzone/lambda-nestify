@@ -25,7 +25,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   create(@Body() body: CreateUserDto) {
