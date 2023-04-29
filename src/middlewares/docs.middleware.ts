@@ -22,7 +22,7 @@ export class DocsMiddleware implements NestMiddleware {
     const file = filter.find((e) => url.includes(e));
     if (file) {
       res.writeHead(301, {
-        Location: `${this.configs.get('basePath')}/public/${file}`,
+        Location: `https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.0.0-alpha.7/${file}`,
       });
       res.end();
       return next();

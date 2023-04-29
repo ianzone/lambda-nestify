@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { join, resolve } from 'path';
 import { LogService } from 'src/services';
 import { AppModule } from './app.module';
 import { Configs } from './configs';
@@ -59,13 +58,24 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
   SwaggerModule.setup('/docs', app, document, {});
 }
 
-function setAssets(app: NestFastifyApplication) {
-  const dir = resolve();
-  app.useStaticAssets({
-    root: [join(dir, 'public'), join(dir, 'node_modules', 'swagger-ui-dist')],
-    prefix: '/public/',
-  });
-}
+// function setAssets(app: NestFastifyApplication) {
+//   const dir = resolve();
+//   app.useStaticAssets({
+//     root: join(dir, 'public'),
+//     prefix: '/public/',
+//   });
+// }
+
+// require @fastify/view
+// function setViews(app: NestFastifyApplication) {
+//   const dir = resolve();
+//   app.setViewEngine({
+//     engine: {
+//       handlebars: hbs,
+//     },
+//     templates: join(dir, 'views'),
+//   });
+// }
 
 export async function createApp() {
   const useCustomerLogger = process.env.NODE_ENV !== 'dev';
@@ -84,7 +94,6 @@ export async function createApp() {
   // @ts-ignore https://github.com/fastify/fastify-helmet/issues/216
   await app.register(helmet, { contentSecurityPolicy: false });
 
-  setAssets(app);
   setVersioning(app);
   setValidation(app);
   setSwagger(app, configService);
