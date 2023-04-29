@@ -1,4 +1,4 @@
-export function delay(ms?: number, callback?: Function) {
+export function delay(ms?: number, callback?: () => void) {
   return new Promise((resolve) => {
     setTimeout(() => {
       callback?.();

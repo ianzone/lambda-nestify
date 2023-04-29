@@ -8,9 +8,11 @@ import { ContextService } from './services';
 @Catch()
 export class AppFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(AppFilter.name);
+
   constructor(private readonly ctx: ContextService) {
     super();
   }
+
   async catch(exception: Error, host: ArgumentsHost) {
     const obj = host.switchToHttp();
     const req = obj.getRequest<FastifyRequest>();
@@ -34,7 +36,8 @@ export class AppFilter extends BaseExceptionFilter {
       const expRes = exception.getResponse() as any;
       message = expRes.message;
       if (statusCode === 404) {
-        return super.catch(exception, host);
+        super.catch(exception, host);
+        return;
       }
       this.logger.warn(ctx, exception.stack);
     } else {

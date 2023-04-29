@@ -19,9 +19,9 @@ export class AuthMiddleware implements NestMiddleware {
   ) { }
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
-  async use(req: IncomingMessage, res: ServerResponse, next: Function) {
+  async use(req: IncomingMessage, res: ServerResponse, next: () => void) {
     try {
-      const authorization = req.headers.authorization;
+      const { authorization } = req.headers;
       const jwt = authorization?.split('Bearer ')[1];
       if (!jwt) throw new Error('missing authorization');
 

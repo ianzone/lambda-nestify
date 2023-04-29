@@ -25,7 +25,7 @@ export class ResourcesController {
     return this.resourcesService.findAll();
   }
 
-  @Head(':id')  //NOTE - The Head method must be defined before the Get method
+  @Head(':id')  // NOTE - The Head method must be defined before the Get method
   checkOne(@Param('id') id: string) {
     return this.resourcesService.checkOne(id);
   }

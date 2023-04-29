@@ -10,17 +10,16 @@ import { UsersService } from './users.service';
 @Module({
   imports: [
     DynamooseModule.forFeatureAsync([{
-      inject:[ConfigService],
-      useFactory: (_, configs: ConfigService<Configs>) => {
-        return {
+      inject: [ConfigService],
+      useFactory: (_, configs: ConfigService<Configs>) => ({
         tableName: configs.get<string>('usersTable'),
         schema: UserSchema,
-      }},
-      name:'users',
+      }),
+      name: 'users',
     }])
   ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

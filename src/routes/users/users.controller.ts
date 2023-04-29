@@ -39,7 +39,7 @@ export class UsersController {
 
   @Get()
   findAll(@Query() query: QueryUserDto) {
-    return this.usersService.findAll();
+    return this.usersService.findAll(query);
   }
 
   @Head(':id')

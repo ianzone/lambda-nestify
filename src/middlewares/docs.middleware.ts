@@ -7,8 +7,10 @@ import { Configs } from 'src/configs';
 @Injectable()
 export class DocsMiddleware implements NestMiddleware {
   private readonly logger = new Logger(DocsMiddleware.name);
-  constructor(private readonly configs: ConfigService<Configs>) {}
-  use(req: IncomingMessage, res: ServerResponse, next: Function) {
+
+  constructor(private readonly configs: ConfigService<Configs>) { }
+
+  use(req: IncomingMessage, res: ServerResponse, next: () => void) {
     const filter = [
       'swagger-ui.css',
       'swagger-ui-bundle.js',

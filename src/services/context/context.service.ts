@@ -4,11 +4,12 @@ import { Tenant, User } from 'src/routes';
 
 @Injectable()
 export class ContextService {
-  constructor(private readonly cls: ClsService) {}
+  constructor(private readonly cls: ClsService) { }
 
   get auth(): Auth {
     return this.cls.get<Auth>('auth');
   }
+
   set auth(val: Auth) {
     this.cls.set<Auth>('auth', val);
   }
@@ -16,6 +17,7 @@ export class ContextService {
   get tenant(): Tenant {
     return this.cls.get<Tenant>('tenant');
   }
+
   set tenant(val: Tenant) {
     this.cls.set<Tenant>('tenant', val);
   }
@@ -23,6 +25,7 @@ export class ContextService {
   get user(): User {
     return this.cls.get<User>('user');
   }
+
   set user(val: User) {
     this.cls.set<User>('user', val);
   }
@@ -30,6 +33,7 @@ export class ContextService {
   get trace(): LogTrace {
     return this.cls.get<LogTrace>('trace');
   }
+
   set trace(val: LogTrace) {
     this.cls.set<LogTrace>('trace', val);
   }

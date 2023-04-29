@@ -54,12 +54,6 @@ import configs from './configs';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    const mid = (req: any, res: any, next: any) => {
-      console.log(req.url);
-      return next();
-    };
-    consumer.apply(mid).forRoutes('/');
-
     // middleware are mounted in order
     // ClsMiddleware has to be mounted first
     consumer.apply(ClsMiddleware).exclude('/docs/(.*)').forRoutes('(.*)');

@@ -35,7 +35,7 @@ export class CreateTenantDto implements Tenant {
   @IsString()
   name: string;
 
-  @ApiProperty({isArray: true, type: String})
+  @ApiProperty({ isArray: true, type: String })
   @IsString({ each: true })
   clientId: string[];
 

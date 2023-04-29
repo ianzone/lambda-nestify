@@ -68,7 +68,7 @@ function setAssets(app: NestFastifyApplication) {
 }
 
 export async function createApp() {
-  const useCustomerLogger = process.env.NODE_ENV === 'dev' ? false : true;
+  const useCustomerLogger = process.env.NODE_ENV !== 'dev';
 
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter(), {
     cors: true,
@@ -81,6 +81,7 @@ export async function createApp() {
     app.useLogger(app.get(LogService));
   }
 
+  // @ts-ignore https://github.com/fastify/fastify-helmet/issues/216
   await app.register(helmet, { contentSecurityPolicy: false });
 
   setAssets(app);

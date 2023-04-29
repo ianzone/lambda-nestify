@@ -10,8 +10,8 @@ export class InternalGuard implements CanActivate {
 
     if (token === 'Secure_2023') {
       return true;
-    } else {
-      return false;
     }
+    return false;
+
   }
 }

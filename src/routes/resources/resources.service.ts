@@ -5,11 +5,11 @@ import { UpdateResourceDto } from './dto/update-resource.dto';
 @Injectable()
 export class ResourcesService {
   create(body: CreateResourceDto) {
-    return 'This action adds a new resource';
+    return `This action adds a new resource ${body}`;
   }
 
   overwrite(body: CreateResourceDto) {
-    return 'This action overwrites a resource';
+    return `This action overwrites a resource ${body}`;
   }
 
   findAll() {
@@ -27,7 +27,7 @@ export class ResourcesService {
   }
 
   update(id: string, body: UpdateResourceDto) {
-    return `This action updates the #${id} resource`;
+    return `This action updates the #${id} resource with ${body}`;
   }
 
   remove(id: string) {

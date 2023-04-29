@@ -8,10 +8,11 @@ import { Tenant } from './schemas/tenant.schema';
 @Injectable()
 export class TenantsService {
   private readonly logger = new Logger(TenantsService.name);
+
   constructor(
     @InjectModel('tenants')
     private tenants: Model<Tenant, { id: string }>,
-  ) {}
+  ) { }
 
   create(body: CreateTenantDto) {
     // TODO: unit test
@@ -39,8 +40,8 @@ export class TenantsService {
     return this.tenants.get({ id });
   }
 
-  update(id: string, updateTenantDto: UpdateTenantDto) {
-    return `This action updates a #${id} tenant`;
+  update(id: string, body: UpdateTenantDto) {
+    return `This action updates a #${id} tenant with ${body}`;
   }
 
   remove(id: string) {

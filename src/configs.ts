@@ -1,5 +1,7 @@
 import { LogLevel } from '@nestjs/common';
 
+import { auth, tenant, user } from './mock';
+
 export default (): Configs => {
   const isOffline = process.env.NODE_ENV === 'dev' || process.env.IS_OFFLINE === 'true';
   const baseUrl = isOffline
@@ -7,8 +9,8 @@ export default (): Configs => {
     : `https://${process.env.DOMAIN}`;
   const stagePath = process.env.STAGE_PATH || '';
 
-  const tenantsTable = process.env.tenantsTable;
-  const usersTable = process.env.usersTable;
+  const { tenantsTable } = process.env;
+  const { usersTable } = process.env;
   if (!tenantsTable) {
     throw new Error('Missing tenant table');
   }
@@ -33,7 +35,6 @@ export interface Configs {
   logLevel: LogLevel[];
 }
 
-import { auth, tenant, user } from './mock';
 export const mock = {
   enable: true,
   user,
