@@ -76,6 +76,11 @@
     ],
     "*.!ts": "prettier --write --ignore-unknown"
   },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
+  },
   "engines": {
     "node": ">=18",
     "pnpm": ">=8"
