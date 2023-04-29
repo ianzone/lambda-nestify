@@ -43,6 +43,17 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
       type: 'http',
       description: 'Please enter your Cognito accessToken',
     })
+    .addOAuth2({
+      type: 'oauth2',
+      flows: {
+        implicit: {
+          scopes: {
+            openid: 'openid',
+          },
+          authorizationUrl: `https://internal-user.auth.us-east-1.amazoncognito.com/login`,
+        },
+      },
+    })
     .setVersion('0.0.0')
     .addTag('Resources', 'Business logic endpoints')
     .addTag(
@@ -55,7 +66,25 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
     .build();
   const document = SwaggerModule.createDocument(app, config);
   // https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
-  SwaggerModule.setup('/docs', app, document, {});
+  SwaggerModule.setup('/docs', app, document, {
+    customJsStr: `function addToken() {if(window.location.hash.includes('access_token')){
+      document.querySelector(".btn.authorize.unlocked").click();
+
+    const tokenInput=document.querySelector('[aria-label="auth-bearer-value"]');
+    tokenInput.value='-DELETE_ME-'+window.location.hash.split('%26')[1].split('%3D')[1];
+}}
+    setTimeout(addToken, 1000);`,
+    customSiteTitle: 'App API',
+    swaggerOptions: {
+      // https://github.com/nestjs/swagger/issues/1828
+      persistAuthorization: true,
+      oauth2RedirectUrl: `${baseUrl}/docs?token=Secure_2023`,
+      initOAuth: {
+        clientId: '1khs1nnmo2faioic9a4tm8hvst',
+        scopes: ['openid'],
+      },
+    },
+  });
 }
 
 // function setAssets(app: NestFastifyApplication) {
