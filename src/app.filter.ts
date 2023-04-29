@@ -18,8 +18,7 @@ export class AppFilter extends BaseExceptionFilter {
     const req = obj.getRequest<FastifyRequest>();
     const res = obj.getResponse<FastifyReply | ServerResponse>();
     const ctx = {
-      Method: req.method,
-      Path: req.url,
+      Route: `${req.method} ${req.url}`,
       Params: req.params,
       Query: req.query,
       Headers: req.headers,
