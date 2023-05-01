@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
       {
         inject: [ConfigService],
         useFactory: (_, configs: ConfigService<Configs>) => ({
-          tableName: configs.get<string>('usersTable'),
+          options: { tableName: configs.get<string>('usersTable') },
           schema: UserSchema,
         }),
         name: 'users',

@@ -13,7 +13,7 @@ import { TenantsService } from './tenants.service';
       {
         inject: [ConfigService],
         useFactory: (_, configs: ConfigService<Configs>) => ({
-          tableName: configs.get<string>('tenantsTable'),
+          options: { tableName: configs.get<string>('tenantsTable') },
           schema: TenantSchema,
         }),
         name: 'tenants',
