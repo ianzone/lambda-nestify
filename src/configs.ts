@@ -36,7 +36,7 @@ export interface Configs {
 }
 
 export const mock = {
-  enable: true,
+  enable: false,
   user,
   tenant,
   auth,

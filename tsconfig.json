@@ -6,13 +6,15 @@
     "baseUrl": ".",
     // Output
     "outDir": "dist",
+    "target": "ES2021", // the higher target has some bugs
     "sourceMap": true,
     "incremental": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     // Type Checking
+    "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "noFallthroughCasesInSwitch": true
-  },
+  }
 }

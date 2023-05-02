@@ -11,7 +11,8 @@
     "docs": "compodoc -p tsconfig.doc.json -s",
     "format": "prettier src --write --ignore-unknown",
     "lint": "eslint src --ext .ts",
-    "prepare": "is-ci ||husky install"
+    "prepare": "is-ci ||husky install",
+    "commit": "git add . && git-cz"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.321.1",
@@ -44,8 +45,8 @@
     "@tsconfig/node-lts": "^18.12.1",
     "@types/aws-lambda": "^8.10.114",
     "@types/node": "^18.16.3",
-    "@typescript-eslint/eslint-plugin": "^5.59.1",
-    "@typescript-eslint/parser": "^5.59.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
     "commitizen": "^4.3.0",
     "esbuild": "^0.17.18",
     "eslint": "^8.39.0",

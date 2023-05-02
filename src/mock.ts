@@ -11,10 +11,10 @@ const auth: Auth = {
   groups: ['admin'],
 };
 const user: User = {
-  tenantId: '',
-  id: '',
-  email: '',
-  name: '',
+  tenantId: 'userPoolId',
+  id: 'cognitoSub',
+  email: 'yiheng.work@gmail.com',
+  name: 'ian',
 };
 const tenant: Tenant = {
   id: '',

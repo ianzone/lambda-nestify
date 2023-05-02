@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ClsService } from 'nestjs-cls';
+import { ClsService, ClsStore } from 'nestjs-cls';
 import { Tenant, User } from 'src/routes';
 
 @Injectable()
 export class ContextService {
-  constructor(private readonly cls: ClsService) {}
+  constructor(private readonly cls: ClsService<CtxStore>) {}
 
   get auth(): Auth {
     return this.cls.get<Auth>('auth');
@@ -58,3 +58,5 @@ export interface Aux {
   tenant: Tenant;
   user: User;
 }
+
+export type CtxStore = ClsStore & Aux;

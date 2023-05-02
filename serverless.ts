@@ -2,7 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 const serverlessConfiguration: AWS = {
   app: 'demo',
-  service: 'service',
+  service: '${self:app}-service',
 
   frameworkVersion: '3',
   configValidationMode: 'error',
@@ -15,7 +15,7 @@ const serverlessConfiguration: AWS = {
     architecture: 'arm64',
     timeout: 29,
     tags: {
-      developer: 'ian',
+      maintainer: 'ian',
       project: '${self:app}',
       service: '${self:service}',
     },
@@ -48,7 +48,7 @@ const serverlessConfiguration: AWS = {
 
   params: {
     default: {
-      domain: 'demo-service.tin.info',
+      domain: '${self:service}.${env:Certificate_Name}',
       tenantsTable: '${self:app}-${self:service}-tenants-${sls:stage}',
       usersTable: '${self:app}-${self:service}-users-${sls:stage}',
     },
@@ -111,7 +111,7 @@ const serverlessConfiguration: AWS = {
     customDomain: {
       // https://github.com/amplify-education/serverless-domain-manager
       domainName: '${param:domain}',
-      certificateName: 'tin.info',
+      certificateName: '${env:Certificate_Name}',
       basePath: '${sls:stage}',
       autoDomain: true,
     },
