@@ -30,4 +30,10 @@ describe('ResourcesService', () => {
     console.log(res);
     expect(res).toBe(`This action returns the #${user.id} resource`);
   });
+
+  test('remove', () => {
+    const res = cls.runWith({ auth, user, tenant }, () => service.remove(user.id));
+    console.log(res);
+    expect(res).toBe(`This action removes the #${user.id} resource`);
+  });
 });
