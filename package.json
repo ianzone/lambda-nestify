@@ -12,7 +12,7 @@
     "format": "prettier src --write --ignore-unknown",
     "lint": "eslint src --ext .ts",
     "prepare": "is-ci ||husky install",
-    "commit": "git add . && cz"
+    "commit": "git add . && git commit -m ' '"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.321.1",
