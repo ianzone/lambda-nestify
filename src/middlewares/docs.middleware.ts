@@ -1,7 +1,6 @@
-import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { IncomingMessage, ServerResponse } from 'http';
-import { parse } from 'querystring';
 import { Configs } from 'src/configs';
 
 @Injectable()
@@ -22,7 +21,7 @@ export class DocsMiddleware implements NestMiddleware {
     const file = filter.find((e) => url.includes(e));
     if (file) {
       res.writeHead(301, {
-        Location: `https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.0.0-alpha.7/${file}`,
+        Location: `https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.0.0-alpha.8/${file}`,
       });
       res.end();
       return next();
@@ -30,11 +29,17 @@ export class DocsMiddleware implements NestMiddleware {
     if (url.includes('swagger-ui-init.js')) {
       return next();
     }
-    this.logger.debug('');
-    const { token } = parse(url.split('?')[1]);
-    this.logger.debug(`docs access token: ${token}`);
-    if (token !== 'Secure_2023') {
-      throw new UnauthorizedException();
+    const authString = Buffer.from(
+      req.headers.authorization?.split('Basic ')[1] || '',
+      'base64'
+    ).toString('ascii');
+    this.logger.debug(`docs auth: ${authString}`);
+    if (authString !== 'docs:Secure_2023') {
+      res.writeHead(401, {
+        'WWW-Authenticate': 'Basic',
+      });
+      res.end();
+      return next();
     }
     return next();
   }

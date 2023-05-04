@@ -28,14 +28,14 @@ function setValidation(app: NestFastifyApplication) {
 
 function setSwagger(app: NestFastifyApplication, configService: ConfigService<Configs, true>) {
   const baseUrl = configService.get('baseUrl');
-  const swaggerJson = `${baseUrl}/docs-json?token=Secure_2023`;
+  const swaggerJson = `${baseUrl}/docs-json`;
   // https://docs.nestjs.com/openapi/introduction
   const config = new DocumentBuilder()
     .setTitle('Demo API Service')
     .setDescription(
       `<p>Source code: <a href="https://github.com/ianzone/lambda-nestify" target="_blank">https://github.com/ianzone/lambda-nestify</a></p>
       <p>Endpoint base url: <b>${baseUrl}</b><p>
-      <p>Import swagger JSON from <a href="${swaggerJson}" target="_blank">${swaggerJson}</a></p>`
+      <p>Import Swagger JSON with Basic Auth from <a href="${swaggerJson}" target="_blank">${swaggerJson}</a></p>`
     )
     .addServer(configService.get('basePath'))
     .addBearerAuth({
