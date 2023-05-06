@@ -13,7 +13,13 @@ import { TenantsService } from './tenants.service';
       {
         inject: [ConfigService],
         useFactory: (_, configs: ConfigService<Configs>) => ({
-          options: { tableName: configs.get<string>('tenantsTable') },
+          options: {
+            tableName: configs.get<string>('tenantsTable'),
+            // https://dynamoosejs.com/other/FAQ#why-is-it-recommended-to-set-create-update--waitforactive-model-options-to-false-for-production-environments
+            create: false,
+            update: false,
+            waitForActive: false,
+          },
           schema: TenantSchema,
         }),
         name: 'tenants',

@@ -25,6 +25,7 @@ const serverlessConfiguration: AWS = {
         statements: [
           // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_statement.html
           {
+            // https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazondynamodb.html
             Effect: 'Allow',
             Action: ['dynamodb:Scan', 'dynamodb:Query', 'dynamodb:*Item'],
             Resource: [
