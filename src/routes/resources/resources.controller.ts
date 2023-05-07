@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, Head, Param, Patch, Post, Put } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 import { ResourcesService } from './resources.service';
 
 @ApiTags('Resources')
+@ApiOAuth2([])
 @ApiBearerAuth()
 @Controller('resources')
 export class ResourcesController {
