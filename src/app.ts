@@ -117,7 +117,16 @@ export async function createApp() {
   }
 
   // @ts-ignore https://github.com/fastify/fastify-helmet/issues/216
-  await app.register(helmet, { contentSecurityPolicy: false });
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
+        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+      },
+    },
+  });
 
   setVersioning(app);
   setValidation(app);

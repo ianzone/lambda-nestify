@@ -50,14 +50,23 @@ const serverlessConfiguration: AWS = {
   params: {
     default: {
       domain: '${self:service}.${env:Certificate_Name}',
-      tenantsTable: '${self:app}-${self:service}-tenants-${sls:stage}',
-      usersTable: '${self:app}-${self:service}-users-${sls:stage}',
+      tenantsTable: '${self:service}-tenants-${sls:stage}',
+      usersTable: '${self:service}-users-${sls:stage}',
     },
   },
 
   package: {
-    individually: true,
-    patterns: ['public/**/*', 'views/**/*'],
+    individually: false,
+    patterns: [
+      'public/**/*',
+      'views/**/*',
+      'node_modules/swagger-ui-dist/**/*',
+      // 'node_modules/swagger-ui-dist/swagger-ui.css',
+      // 'node_modules/swagger-ui-dist/swagger-ui-bundle.js',
+      // 'node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js',
+      // 'node_modules/swagger-ui-dist/favicon-16x16.png',
+      // 'node_modules/swagger-ui-dist/favicon-32x32.png',
+    ],
   },
 
   functions: {
@@ -115,6 +124,7 @@ const serverlessConfiguration: AWS = {
       certificateName: '${env:Certificate_Name}',
       basePath: '${sls:stage}',
       autoDomain: true,
+      preserveExternalPathMappings: true,
     },
   },
 
@@ -137,6 +147,7 @@ const serverlessConfiguration: AWS = {
               KeyType: 'HASH',
             },
           ],
+          // NOTE: change this in production
           ProvisionedThroughput: {
             // https://www.serverless.com/blog/dynamodb-on-demand-serverless
             // https://github.com/ACloudGuru/serverless-plugin-dynamo-autoscaling
@@ -170,6 +181,7 @@ const serverlessConfiguration: AWS = {
               KeyType: 'RANGE',
             },
           ],
+          // NOTE: change this in production
           ProvisionedThroughput: {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
