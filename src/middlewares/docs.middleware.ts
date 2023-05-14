@@ -12,44 +12,40 @@ export class DocsMiddleware implements NestMiddleware {
   constructor(private readonly configs: ConfigService<Configs>) {}
 
   use(req: IncomingMessage, res: ServerResponse, next: () => void) {
-    const url = req?.url || '';
+    const url = new URL(`${this.configs.get<string>('baseUrl')}${req.url}`);
+    const pathname = url.pathname;
 
-    if (url.includes('Secure_2023') || url.includes('swagger-ui-init.js')) {
+    if (pathname.includes('swagger-ui-init.js')) {
       return next();
     }
 
-    const Url = new URL(`${this.configs.get<string>('baseUrl')}${url}`);
-    const pathname = Url.pathname;
+    const lastPath = pathname.split('/').pop() || '';
 
-    const file = pathname.split('/').pop();
-    if (file) {
-      switch (file.split('.').pop()) {
-        case 'html':
-          res.setHeader('Content-Type', 'text/html');
-          break;
-        case 'css':
-          res.setHeader('Content-Type', 'text/css');
-          break;
-        case 'js':
-          res.setHeader('Content-Type', 'application/javascript');
-          break;
-        case 'map':
-          res.setHeader('Content-Type', 'application/json');
-          break;
-        case 'png':
-          res.setHeader('Content-Type', 'image/png');
-          break;
-        default:
-          break;
-      }
-      res.write(bufferFile(file));
-      res.end();
-      return next();
+    switch (lastPath.split('.').pop()) {
+      case 'html':
+        res.setHeader('Content-Type', 'text/html');
+        break;
+      case 'css':
+        res.setHeader('Content-Type', 'text/css');
+        break;
+      case 'js':
+        res.setHeader('Content-Type', 'application/javascript');
+        break;
+      case 'map':
+        res.setHeader('Content-Type', 'application/json');
+        break;
+      case 'png':
+        res.setHeader('Content-Type', 'image/png');
+        break;
+      default:
+        // not a static asset
+        if (url.searchParams.get('token') !== this.configs.get<string>('token')) {
+          throw new UnauthorizedException();
+        }
+        return next();
     }
-
-    if (Url.searchParams.get('token') !== 'Secure_2023') {
-      throw new UnauthorizedException();
-    }
+    res.write(bufferFile(lastPath));
+    res.end();
     return next();
   }
 }

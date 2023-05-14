@@ -28,7 +28,7 @@ function setValidation(app: NestFastifyApplication) {
 
 function setSwagger(app: NestFastifyApplication, configService: ConfigService<Configs, true>) {
   const baseUrl = configService.get('baseUrl');
-  const swaggerJson = `${baseUrl}/docs-json`;
+  const swaggerJson = `${baseUrl}/docs-json?token=${configService.get('token')}`;
   // https://docs.nestjs.com/openapi/introduction
   const config = new DocumentBuilder()
     .setTitle('Demo API Service')

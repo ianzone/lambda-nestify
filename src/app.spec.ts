@@ -21,10 +21,10 @@ describe('App (e2e)', () => {
     await app.close();
   });
 
-  test('/ GET', async () => {
+  test('/hello GET', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: '/',
+      url: '/hello',
     });
     expect(res.statusCode).toBe(200);
     expect(res.body).toBe('Hello World!');

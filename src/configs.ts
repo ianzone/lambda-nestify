@@ -23,6 +23,7 @@ export default (): Configs => {
     usersTable,
     baseUrl: `${baseUrl}${stagePath}`,
     basePath: stagePath,
+    token: 'Secure_2023',
     logLevel: stagePath === '/dev' ? ['debug'] : ['error'],
   };
 };
@@ -32,6 +33,7 @@ export interface Configs {
   usersTable: string;
   baseUrl: string;
   basePath: string;
+  token: string;
   logLevel: LogLevel[];
 }
 
