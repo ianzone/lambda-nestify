@@ -81,6 +81,7 @@ const serverlessConfiguration: AWS = {
     'serverless-localstack',
     'serverless-offline',
     'serverless-domain-manager',
+    'serverless-plugin-aws-alerts',
   ],
 
   custom: {
@@ -116,6 +117,27 @@ const serverlessConfiguration: AWS = {
       basePath: '${sls:stage}',
       autoDomain: true,
       preserveExternalPathMappings: true,
+    },
+    // https://github.com/ACloudGuru/serverless-plugin-aws-alerts
+    alerts: {
+      stages: ['dev', 'prod'],
+      topics: {
+        alarm: {
+          topic: '${self:service}-${sls:stage}-alarm',
+          notifications: [
+            {
+              protocol: 'email',
+              endpoint: '${env:Notification_Email}', // once deployed, a subscription confirmation mail will be sent to this address
+            },
+          ],
+        },
+      },
+      alarms: ['functionErrors', 'functionThrottles'],
+      definitions: {
+        functionErrors: {
+          pattern: 'ERROR', // https://docs.aws.amazon.com/zh_cn/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html
+        },
+      },
     },
   },
 
