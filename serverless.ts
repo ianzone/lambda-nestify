@@ -56,7 +56,7 @@ const serverlessConfiguration: AWS = {
   },
 
   package: {
-    individually: false,
+    individually: true,
     patterns: ['public/**/*', 'views/**/*', 'node_modules/swagger-ui-dist/**/*'],
   },
 
@@ -64,6 +64,13 @@ const serverlessConfiguration: AWS = {
     api: {
       handler: 'dist/lambda.handler',
       events: [
+        {
+          http: {
+            method: 'ANY',
+            path: '/',
+            cors: true, // https://www.serverless.com/framework/docs/providers/aws/events/apigateway#enabling-cors
+          },
+        },
         {
           http: {
             method: 'ANY',

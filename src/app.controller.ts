@@ -9,7 +9,7 @@ export class AppController {
 
   constructor(private readonly appService: AppService) {}
 
-  @Get('hello')
+  @Get()
   getHello() {
     this.logger.verbose('getHello', 'Hello');
     return this.appService.getHello();
