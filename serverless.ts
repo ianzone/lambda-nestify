@@ -33,11 +33,17 @@ const serverlessConfiguration: AWS = {
               { 'Fn::GetAtt': ['UsersTable', 'Arn'] },
             ],
           },
+          {
+            Effect: 'Allow',
+            Action: ['sns:Publish'],
+            Resource: [{ Ref: 'AlarmTopic' }],
+          },
         ],
       },
     },
     logRetentionInDays: 60,
     environment: {
+      REGION: '${aws:region}',
       STAGE_PATH: '/${sls:stage}',
       NODE_OPTIONS: '--enable-source-maps',
       DOMAIN: '${param:domain}',
@@ -62,7 +68,7 @@ const serverlessConfiguration: AWS = {
 
   functions: {
     api: {
-      handler: 'dist/lambda.handler',
+      handler: 'dist/api.handler',
       events: [
         {
           http: {
@@ -80,6 +86,20 @@ const serverlessConfiguration: AWS = {
         },
       ],
     },
+    alarm: {
+      handler: 'dist/lambdas/alarm.handler',
+      environment: {
+        TopicArn: { Ref: 'AlarmTopic' },
+      },
+      events: [
+        {
+          cloudwatchLog: {
+            logGroup: '/aws/lambda/${self:service}-${sls:stage}-api',
+            filter: 'ERROR',
+          },
+        },
+      ],
+    },
   },
 
   plugins: [
@@ -88,7 +108,6 @@ const serverlessConfiguration: AWS = {
     'serverless-localstack',
     'serverless-offline',
     'serverless-domain-manager',
-    'serverless-plugin-aws-alerts',
   ],
 
   custom: {
@@ -124,27 +143,6 @@ const serverlessConfiguration: AWS = {
       basePath: '${sls:stage}',
       autoDomain: true,
       preserveExternalPathMappings: true,
-    },
-    // https://github.com/ACloudGuru/serverless-plugin-aws-alerts
-    alerts: {
-      stages: ['dev', 'prod'],
-      topics: {
-        alarm: {
-          topic: '${self:service}-${sls:stage}-alarm',
-          notifications: [
-            {
-              protocol: 'email',
-              endpoint: '${env:Notification_Email}', // once deployed, a subscription confirmation mail will be sent to this address
-            },
-          ],
-        },
-      },
-      alarms: ['functionErrors', 'functionThrottles'],
-      definitions: {
-        functionErrors: {
-          pattern: 'ERROR', // https://docs.aws.amazon.com/zh_cn/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html
-        },
-      },
     },
   },
 
@@ -206,6 +204,19 @@ const serverlessConfiguration: AWS = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
+        },
+      },
+      AlarmTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: '${self:service}-alarm',
+          DisplayName: '${self:service}-alarm',
+          Subscription: [
+            {
+              Protocol: 'email',
+              Endpoint: '${env:Notification_Email}',
+            },
+          ],
         },
       },
     },
