@@ -24,4 +24,4 @@ const user: Schema<User, SchemaDefinition[string]> = {
   name: String,
 };
 
-export const UserSchema = new DynamoSchema(user);
+export const UserSchema = new DynamoSchema(user, { timestamps: true });

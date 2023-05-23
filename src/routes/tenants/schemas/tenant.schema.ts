@@ -49,4 +49,4 @@ const tenant: Schema<Tenant, SchemaDefinition[string] | any> = {
   },
 };
 
-export const TenantSchema = new DynamoSchema(tenant);
+export const TenantSchema = new DynamoSchema(tenant, { timestamps: true });
