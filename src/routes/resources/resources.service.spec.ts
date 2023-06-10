@@ -20,9 +20,9 @@ describe('ResourcesService', () => {
   });
 
   test('findAll', () => {
-    const res = cls.runWith({ auth, user, tenant }, () => service.findAll());
+    const res = cls.runWith({ auth, user, tenant }, () => service.findAll('#123'));
     console.log(res);
-    expect(res).toBe(`This action returns all resources of the user ${user.name}`);
+    expect(res).toBe(`This action returns all resources of the user #123`);
   });
 
   test('findOne', () => {

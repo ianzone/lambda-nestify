@@ -1,12 +1,11 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { ContextService } from 'src/services';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
 
 @Injectable()
 export class ResourcesService {
   private logger = new Logger(ResourcesService.name);
-  constructor(private readonly ctx: ContextService) {}
+  constructor() {}
 
   create(body: CreateResourceDto) {
     return `This action adds a new resource ${body}`;
@@ -16,8 +15,8 @@ export class ResourcesService {
     return `This action overwrites a resource ${body}`;
   }
 
-  findAll() {
-    return 'This action returns all resources of the user ' + this.ctx.user.name;
+  findAll(userId: string) {
+    return 'This action returns all resources of the user ' + userId;
   }
 
   checkOne(id: string) {

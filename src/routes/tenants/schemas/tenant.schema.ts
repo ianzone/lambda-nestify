@@ -49,4 +49,27 @@ const tenant: Schema<Tenant, SchemaDefinition[string] | any> = {
   },
 };
 
-export const TenantSchema = new DynamoSchema(tenant, { timestamps: true });
+export const TenantSchema = new DynamoSchema(tenant, {
+  timestamps: {
+    createdAt: {
+      createdAt: {
+        type: {
+          value: Date,
+          settings: {
+            storage: 'seconds',
+          },
+        },
+      },
+    },
+    updatedAt: {
+      updatedAt: {
+        type: {
+          value: Date,
+          settings: {
+            storage: 'seconds',
+          },
+        },
+      },
+    },
+  },
+});

@@ -51,10 +51,10 @@ export class AuthMiddleware implements NestMiddleware {
       }
 
       // get user details
-      let user = await this.users.findOne(auth.userId);
+      let user = await this.users.findOne(auth.tenantId, auth.userId);
       if (!user) {
         // not a nylas user, use virtual account
-        user = await this.users.findOne(auth.tenantId);
+        user = await this.users.findOne(auth.tenantId, auth.tenantId);
       }
       this.ctx.user = user;
       this.logger.debug({ user });

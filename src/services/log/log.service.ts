@@ -1,14 +1,10 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Configs } from 'src/configs';
-import { ContextService } from '../context/context.service';
 
 @Injectable()
 export class LogService extends ConsoleLogger {
-  constructor(
-    private readonly ctx: ContextService,
-    private readonly configs: ConfigService<Configs, true>
-  ) {
+  constructor(private readonly configs: ConfigService<Configs, true>) {
     super('', {
       logLevels: configs.get('logLevel'),
     });

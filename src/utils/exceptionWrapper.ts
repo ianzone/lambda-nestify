@@ -5,6 +5,7 @@ import {
   ForbiddenException,
   GatewayTimeoutException,
   GoneException,
+  HttpException,
   HttpVersionNotSupportedException,
   ImATeapotException,
   InternalServerErrorException,
@@ -21,8 +22,14 @@ import {
   UnsupportedMediaTypeException,
 } from '@nestjs/common';
 
-export function exceptionWrapper(error: { message: string; statusCode: number }) {
-  switch (error.statusCode) {
+export function exceptionWrapper(error: {
+  message?: string;
+  statusCode: number | string;
+}): HttpException {
+  const statusCode =
+    typeof error.statusCode === 'string' ? parseInt(error.statusCode) : error.statusCode;
+
+  switch (statusCode) {
     case 400:
       throw new BadRequestException(error.message);
     case 401:

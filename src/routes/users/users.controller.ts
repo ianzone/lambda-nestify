@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Group, Groups, GroupsGuard } from 'src/guards';
+import { ContextService } from 'src/services';
 import { CreateUserDto, QueryUserDto, UpdateUserDto } from './dto';
 import { UsersService } from './users.service';
 
@@ -25,7 +26,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly ctx: ContextService, private readonly usersService: UsersService) {}
 
   @Post()
   create(@Body() body: CreateUserDto) {
@@ -37,28 +38,33 @@ export class UsersController {
     return this.usersService.overwrite(body);
   }
 
-  @Get()
-  findAll(@Query() query: QueryUserDto) {
-    return this.usersService.findAll(query);
+  @Head(':id') // NOTE - The Head method must be defined before the Get method
+  checkOne(@Param('id') id: string) {
+    const auth = this.ctx.auth;
+    return this.usersService.checkOne(auth.tenantId, id);
   }
 
-  @Head(':id')
-  checkOne(@Param('id') id: string) {
-    return this.usersService.checkOne(id);
+  @Get()
+  findAll(@Query() query: QueryUserDto) {
+    const auth = this.ctx.auth;
+    return this.usersService.findAll(auth.tenantId, query);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    const auth = this.ctx.auth;
+    return this.usersService.findOne(auth.tenantId, id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    return this.usersService.update(id, body);
+    const auth = this.ctx.auth;
+    return this.usersService.update(auth.tenantId, id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+    const auth = this.ctx.auth;
+    return this.usersService.remove(auth.tenantId, id);
   }
 }

@@ -1,5 +1,17 @@
 import type { AWS } from '@serverless/typescript';
 
+function getArnOfTableAndIndex(tables: string[]) {
+  const arns: any[] = [];
+  for (const table of tables) {
+    const tableArn = { 'Fn::GetAtt': [table, 'Arn'] };
+    arns.push(tableArn);
+    arns.push({
+      'Fn::Join': ['', [tableArn, '/*']],
+    });
+  }
+  return arns;
+}
+
 const serverlessConfiguration: AWS = {
   app: 'demo',
   service: '${self:app}-service',
@@ -28,10 +40,7 @@ const serverlessConfiguration: AWS = {
             // https://docs.aws.amazon.com/service-authorization/latest/reference/list_amazondynamodb.html
             Effect: 'Allow',
             Action: ['dynamodb:Scan', 'dynamodb:Query', 'dynamodb:*Item'],
-            Resource: [
-              { 'Fn::GetAtt': ['TenantsTable', 'Arn'] },
-              { 'Fn::GetAtt': ['UsersTable', 'Arn'] },
-            ],
+            Resource: getArnOfTableAndIndex(['TenantsTable', 'UsersTable']),
           },
           {
             Effect: 'Allow',
@@ -63,18 +72,20 @@ const serverlessConfiguration: AWS = {
 
   package: {
     individually: true,
-    patterns: ['public/**/*', 'views/**/*', 'node_modules/swagger-ui-dist/**/*'],
   },
 
   functions: {
     api: {
       handler: 'dist/api.handler',
+      package: {
+        patterns: ['public/**/*', 'views/**/*', 'node_modules/swagger-ui-dist/**/*'],
+      },
       events: [
         {
           http: {
             method: 'ANY',
             path: '/',
-            cors: true, // https://www.serverless.com/framework/docs/providers/aws/events/apigateway#enabling-cors
+            cors: true,
           },
         },
         {
@@ -150,7 +161,7 @@ const serverlessConfiguration: AWS = {
     Resources: {
       TenantsTable: {
         Type: 'AWS::DynamoDB::Table',
-        DeletionPolicy: 'Retain',
+        DeletionPolicy: 'Delete', // NOTE - change to Retain in production
         Properties: {
           TableName: '${param:tenantsTable}',
           AttributeDefinitions: [
@@ -176,7 +187,7 @@ const serverlessConfiguration: AWS = {
       },
       UsersTable: {
         Type: 'AWS::DynamoDB::Table',
-        DeletionPolicy: 'Retain',
+        DeletionPolicy: 'Delete', // NOTE - change to Retain in production
         Properties: {
           TableName: '${param:usersTable}',
           AttributeDefinitions: [
@@ -209,8 +220,8 @@ const serverlessConfiguration: AWS = {
       AlarmTopic: {
         Type: 'AWS::SNS::Topic',
         Properties: {
-          TopicName: '${self:service}-alarm',
-          DisplayName: '${self:service}-alarm',
+          TopicName: '${self:service}-alarm-${sls:stage}',
+          DisplayName: '${self:service}-alarm-${sls:stage}',
           Subscription: [
             {
               Protocol: 'email',

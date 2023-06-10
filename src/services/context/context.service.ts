@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ClsService, ClsStore } from 'nestjs-cls';
 import { Tenant, User } from 'src/routes';
 
+// NOTE - ContextService should not be used in providers' constructor to make providers more pure
 @Injectable()
 export class ContextService {
   constructor(private readonly cls: ClsService<CtxStore>) {}
