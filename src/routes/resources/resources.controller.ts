@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Head, Param, Patch, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Head,
+  Logger,
+  Param,
+  Patch,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { ContextService } from 'src/services';
 import { CreateResourceDto } from './dto/create-resource.dto';
@@ -10,6 +21,7 @@ import { ResourcesService } from './resources.service';
 @ApiBearerAuth()
 @Controller('resources')
 export class ResourcesController {
+  private logger = new Logger(ResourcesController.name);
   constructor(
     private readonly ctx: ContextService,
     private readonly resourcesService: ResourcesService
@@ -17,7 +29,8 @@ export class ResourcesController {
 
   @Post()
   create(@Body() body: CreateResourceDto) {
-    return this.resourcesService.create(body);
+    const user = this.ctx.user;
+    return this.resourcesService.create(user.id, body);
   }
 
   @Put()
@@ -27,7 +40,7 @@ export class ResourcesController {
 
   @Get()
   findAll() {
-    return this.resourcesService.findAll(this.ctx.user.name);
+    return this.resourcesService.findAll(this.ctx.user.id);
   }
 
   @Head(':id') // NOTE - The Head method must be defined before the Get method
@@ -37,7 +50,7 @@ export class ResourcesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.resourcesService.findOne(id);
+    return this.resourcesService.findOne(this.ctx.user.id, id);
   }
 
   @Patch(':id')

@@ -1,14 +1,21 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateResourceDto } from './dto/create-resource.dto';
 import { UpdateResourceDto } from './dto/update-resource.dto';
+import { Resource } from './entities/resource.entity';
 
 @Injectable()
 export class ResourcesService {
   private logger = new Logger(ResourcesService.name);
+  private items: Resource[] = [];
   constructor() {}
 
-  create(body: CreateResourceDto) {
-    return `This action adds a new resource ${body}`;
+  create(userId: string, body: CreateResourceDto) {
+    const item = new Resource({
+      owner: userId,
+      ...body,
+    });
+    this.items.push(item);
+    return item;
   }
 
   overwrite(body: CreateResourceDto) {
@@ -16,7 +23,7 @@ export class ResourcesService {
   }
 
   findAll(userId: string) {
-    return 'This action returns all resources of the user ' + userId;
+    return this.items.filter((item) => item.owner === userId);
   }
 
   checkOne(id: string) {
@@ -25,8 +32,8 @@ export class ResourcesService {
     }
   }
 
-  findOne(id: string) {
-    return `This action returns the #${id} resource`;
+  findOne(userId: string, id: string) {
+    return this.items.find((item) => item.owner === userId && item.id === id);
   }
 
   update(id: string, body: UpdateResourceDto) {

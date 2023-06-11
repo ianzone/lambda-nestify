@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClsModule, ClsService } from 'nestjs-cls';
-import { auth, tenant, user } from 'src/mock';
-import { ContextService, CtxStore } from 'src/services';
+import { ClsModule } from 'nestjs-cls';
+import { user } from 'src/mock';
+import { ContextService } from 'src/services';
 import { beforeAll, describe, expect, test } from 'vitest';
+import { CreateResourceDto } from './dto/create-resource.dto';
+import { Resource } from './entities/resource.entity';
 import { ResourcesService } from './resources.service';
 
 describe('ResourcesService', () => {
   let service: ResourcesService;
-  let cls: ClsService<CtxStore>;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -16,24 +17,21 @@ describe('ResourcesService', () => {
     }).compile();
 
     service = module.get<ResourcesService>(ResourcesService);
-    cls = module.get<ClsService<CtxStore>>(ClsService);
   });
 
-  test('findAll', () => {
-    const res = cls.runWith({ auth, user, tenant }, () => service.findAll('#123'));
-    console.log(res);
-    expect(res).toBe(`This action returns all resources of the user #123`);
-  });
+  const mockPost: CreateResourceDto = {
+    sku: 'test',
+  };
 
-  test('findOne', () => {
-    const res = cls.runWith({ auth, user, tenant }, () => service.findOne(user.id));
-    console.log(res);
-    expect(res).toBe(`This action returns the #${user.id} resource`);
-  });
+  const mockRes: Resource = {
+    id: 'id',
+    owner: user.id,
+    ...mockPost,
+  };
 
-  test('remove', () => {
-    const res = cls.runWith({ auth, user, tenant }, () => service.remove(user.id));
-    console.log(res);
-    expect(res).toBe(`This action removes the #${user.id} resource`);
+  test('create', () => {
+    const res = service.create(user.id, mockPost);
+    expect(res.owner).toBe(mockRes.owner);
+    expect(res.sku).toBe(mockRes.sku);
   });
 });
