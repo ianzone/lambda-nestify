@@ -1,3 +1,3 @@
 export * from './auth';
 export * from './delay';
-export * from './exceptionWrapper';
+export * from './errorWrapper';

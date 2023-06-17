@@ -63,8 +63,8 @@ dependencies:
     specifier: ^3.5.0
     version: 3.5.0(@nestjs/common@10.0.1)(@nestjs/core@10.0.1)
   nestjs-dynamoose:
-    specifier: ^0.5.4
-    version: 0.5.4(@aws-sdk/client-dynamodb@3.354.0)(@nestjs/common@10.0.1)(@nestjs/core@10.0.1)(dynamoose@3.2.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+    specifier: ^0.5.5
+    version: 0.5.5(@aws-sdk/client-dynamodb@3.354.0)(@nestjs/common@10.0.1)(@nestjs/core@10.0.1)(dynamoose@3.2.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
@@ -6482,8 +6482,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /dotenv@16.3.0:
-    resolution: {integrity: sha512-tHB+hmf8MRCkT3VVivGiG8kq9HiGTmQ3FzOKgztfpJQH1IWuZTOvKSJmHNnQPowecAmkCJhLrxdPhOr06LLqIQ==}
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
     engines: {node: '>=12'}
     dev: true
 
@@ -9267,12 +9267,12 @@ packages:
       '@nestjs/core': 10.0.1(@nestjs/common@10.0.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
     dev: false
 
-  /nestjs-dynamoose@0.5.4(@aws-sdk/client-dynamodb@3.354.0)(@nestjs/common@10.0.1)(@nestjs/core@10.0.1)(dynamoose@3.2.0)(reflect-metadata@0.1.13)(rxjs@7.8.1):
-    resolution: {integrity: sha512-f1HWzPgDJKEtjX8TKCl81YE2LZb63lFepVB4QjISF2A1OLFAFas4j0YcTB+BOJ52U7NWlSE6LvWeka2+RbPn9g==}
+  /nestjs-dynamoose@0.5.5(@aws-sdk/client-dynamodb@3.354.0)(@nestjs/common@10.0.1)(@nestjs/core@10.0.1)(dynamoose@3.2.0)(reflect-metadata@0.1.13)(rxjs@7.8.1):
+    resolution: {integrity: sha512-m7lxKDk2eII5Ukmh0mxT53yVyCIx+61iBRwddeJIkRSMhDjQ8CY6babyqKu03EnH17zWigP53iMEZyWpCdnU8g==}
     peerDependencies:
       '@aws-sdk/client-dynamodb': ^3.0.0
-      '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
-      '@nestjs/core': ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
+      '@nestjs/common': ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
       dynamoose: ^3.2.0
       reflect-metadata: ^0.1.12
       rxjs: ^6.0.0 || ^7.0.0
@@ -10581,7 +10581,7 @@ packages:
       d: 1.0.1
       dayjs: 1.11.8
       decompress: 4.2.1
-      dotenv: 16.3.0
+      dotenv: 16.3.1
       dotenv-expand: 10.0.0
       essentials: 1.2.0
       ext: 1.7.0

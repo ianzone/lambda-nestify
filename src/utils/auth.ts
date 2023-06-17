@@ -1,11 +1,13 @@
 import {
   CognitoIdentityProviderClient,
+  CognitoIdentityProviderServiceException,
   GetUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { decomposeUnverifiedJwt } from 'aws-jwt-verify/jwt';
 import { CognitoAccessTokenPayload } from 'aws-jwt-verify/jwt-model';
 import { mock } from 'src/configs';
 import { Auth } from 'src/services';
+import { errorWrapper } from './errorWrapper';
 
 async function getUser(accessToken: string) {
   const command = new GetUserCommand({ AccessToken: accessToken });
@@ -43,22 +45,29 @@ async function getUser(accessToken: string) {
 }
 
 export async function verify(jwt: string): Promise<Auth> {
-  if (mock.enable) {
-    return mock.auth;
+  try {
+    if (mock.enable) {
+      return mock.auth;
+    }
+    const attr = await getUser(jwt);
+
+    // decode jwt and get tenantId from it
+    const decode = decomposeUnverifiedJwt(jwt).payload as CognitoAccessTokenPayload;
+
+    const auth = {
+      token: jwt,
+      tenantId: decode.iss.split('com/')[1],
+      clientId: decode.client_id,
+      userId: decode.sub,
+      email: attr.email,
+      name: attr.name,
+      groups: decode['cognito:groups'] || [],
+    };
+    return auth;
+  } catch (err) {
+    if (err instanceof CognitoIdentityProviderServiceException) {
+      throw errorWrapper(err.$response?.statusCode || 500, err.message);
+    }
+    throw err;
   }
-  const attr = await getUser(jwt);
-
-  // decode jwt and get tenantId from it
-  const decode = decomposeUnverifiedJwt(jwt).payload as CognitoAccessTokenPayload;
-
-  const auth = {
-    token: jwt,
-    tenantId: decode.iss.split('com/')[1],
-    clientId: decode.client_id,
-    userId: decode.sub,
-    email: attr.email,
-    name: attr.name,
-    groups: decode['cognito:groups'] || [],
-  };
-  return auth;
 }
