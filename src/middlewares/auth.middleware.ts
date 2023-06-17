@@ -6,6 +6,10 @@ import { TenantsService, UsersService } from 'src/routes';
 import { Aux, ContextService } from 'src/services';
 import { verify } from 'src/utils';
 
+interface Req extends IncomingMessage {
+  originalUrl: string;
+}
+
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   private readonly logger = new Logger(AuthMiddleware.name);
@@ -19,56 +23,48 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
-  async use(req: IncomingMessage, res: ServerResponse, next: () => void) {
-    try {
-      const { authorization } = req.headers;
-      const jwt = authorization?.split('Bearer ')[1];
-      if (!jwt) throw new Error('missing authorization');
+  async use(req: Req, res: ServerResponse, next: Function) {
+    const { authorization } = req.headers;
+    const jwt = authorization?.split('Bearer ')[1];
+    if (!jwt) throw new Error('missing authorization');
 
-      const auxDataCache = await this.cache.get<Aux>(jwt);
-      if (auxDataCache) {
-        this.logger.debug('cache hit');
-        this.ctx.auth = auxDataCache.auth;
-        this.ctx.tenant = auxDataCache.tenant;
-        this.ctx.user = auxDataCache.user;
-        return next();
-      }
-
-      // verify the jwt
-      const auth = await verify(jwt);
-      this.ctx.auth = auth;
-      this.logger.debug({ auth });
-
-      // get tenant credentials from the tenant service
-      const tenant = await this.tenants.findOne(auth.tenantId);
-      if (!tenant) throw new Error('invalid tenant');
-      this.ctx.tenant = tenant;
-      this.logger.debug({ tenant });
-
-      // @ts-ignore
-      if (req.originalUrl.includes('/users')) {
-        return next();
-      }
-
-      // get user details
-      let user = await this.users.findOne(auth.tenantId, auth.userId);
-      if (!user) {
-        // not a nylas user, use virtual account
-        user = await this.users.findOne(auth.tenantId, auth.tenantId);
-      }
-      this.ctx.user = user;
-      this.logger.debug({ user });
-
-      const auxData: Aux = {
-        auth,
-        tenant,
-        user,
-      };
-
-      this.cache.set(jwt, auxData);
+    const auxDataCache = await this.cache.get<Aux>(jwt);
+    if (auxDataCache) {
+      this.logger.debug('cache hit');
+      this.ctx.auth = auxDataCache.auth;
+      this.ctx.tenant = auxDataCache.tenant;
+      this.ctx.user = auxDataCache.user;
       return next();
-    } catch (err: any) {
-      throw new UnauthorizedException(err.message);
     }
+
+    // verify the jwt
+    const auth = await verify(jwt);
+    this.ctx.auth = auth;
+    this.logger.debug({ auth });
+
+    try {
+      // get tenant credentials from the tenant service
+      this.ctx.tenant = await this.tenants.findOne(auth.tenantId);
+      this.logger.debug({ tenant: this.ctx.tenant });
+    } catch (err) {
+      throw new UnauthorizedException('invalid tenant');
+    }
+
+    try {
+      // get user details
+      this.ctx.user = await this.users.findOne(auth.tenantId, auth.userId);
+      this.logger.debug({ user: this.ctx.user });
+    } catch (err) {
+      throw new UnauthorizedException('invalid user');
+    }
+
+    const auxData: Aux = {
+      auth,
+      tenant: this.ctx.tenant,
+      user: this.ctx.user,
+    };
+
+    this.cache.set(jwt, auxData);
+    return next();
   }
 }

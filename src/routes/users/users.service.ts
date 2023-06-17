@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel, Model } from 'nestjs-dynamoose';
 import { mock } from 'src/configs';
 import { QueryUserDto } from './dto';
@@ -41,27 +41,34 @@ export class UsersService {
   }
 
   checkOne(tenantId: string, id: string) {
-    if (mock.enable) {
-      return mock.user;
-    }
-    return this.users.get(
-      { id, tenantId },
-      {
-        return: 'item',
-        attributes: [],
-      }
-    );
+    return this.getUser({ tenantId, id }, ['id']);
   }
 
   findOne(tenantId: string, id: string) {
     // TODO: add unit test
+    return this.getUser({ tenantId, id });
+  }
+
+  async getUser(key: { tenantId: string; id: string }, attributes?: string[]) {
     if (mock.enable) {
       return mock.user;
     }
 
-    return this.users.get({ id, tenantId });
-  }
+    let res: User;
+    if (attributes?.length === 0) {
+      res = await this.users.get(key);
+    } else {
+      res = await this.users.get(key, {
+        return: 'item',
+        attributes: attributes,
+      });
+    }
 
+    if (!res) {
+      throw new NotFoundException();
+    }
+    return res;
+  }
   update(tenantId: string, id: string, body: UpdateUserDto) {
     return `This action updates a #${id} user with ${body}`;
   }

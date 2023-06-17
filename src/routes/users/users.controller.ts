@@ -40,8 +40,10 @@ export class UsersController {
 
   @Head(':id') // NOTE - The Head method must be defined before the Get method
   checkOne(@Param('id') id: string) {
-    const auth = this.ctx.auth;
-    return this.usersService.checkOne(auth.tenantId, id);
+    if (this.ctx.user.id === id) {
+      return this.ctx.user;
+    }
+    return this.usersService.checkOne(this.ctx.auth.tenantId, id);
   }
 
   @Get()
@@ -52,8 +54,10 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    const auth = this.ctx.auth;
-    return this.usersService.findOne(auth.tenantId, id);
+    if (this.ctx.user.id === id) {
+      return this.ctx.user;
+    }
+    return this.usersService.findOne(this.ctx.auth.tenantId, id);
   }
 
   @Patch(':id')

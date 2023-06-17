@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel, Model } from 'nestjs-dynamoose';
 import { mock } from 'src/configs';
 import { CreateTenantDto } from './dto/create-tenant.dto';
@@ -32,12 +32,36 @@ export class TenantsService {
     return this.tenants.scan().exec();
   }
 
+  checkOne(id: string) {
+    return this.getTenant(id, ['id']);
+  }
+
   findOne(id: string) {
-    // TODO: unit test
+    return this.getTenant(id);
+  }
+
+  async getTenant(id: string, attributes?: string[]) {
     if (mock.enable) {
       return mock.tenant;
     }
-    return this.tenants.get({ id });
+
+    let res: Tenant;
+    if (attributes?.length === 0) {
+      res = await this.tenants.get({ id });
+    } else {
+      res = await this.tenants.get(
+        { id },
+        {
+          return: 'item',
+          attributes: attributes,
+        }
+      );
+    }
+
+    if (!res) {
+      throw new NotFoundException();
+    }
+    return res;
   }
 
   update(id: string, body: UpdateTenantDto) {

@@ -125,6 +125,7 @@ const serverlessConfiguration: AWS = {
     esbuild: {
       // DO NOT minify, nest relies on classnames for reflection
       sourcemap: true,
+      sourceRoot: 'src',
       packager: 'pnpm',
       exclude: [
         '@fastify/view',

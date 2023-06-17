@@ -1,6 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Head,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { InternalGuard } from 'src/guards';
+import { ContextService } from 'src/services';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantsService } from './tenants.service';
@@ -10,7 +22,10 @@ import { TenantsService } from './tenants.service';
 @UseGuards(InternalGuard)
 @Controller('tenants')
 export class TenantsController {
-  constructor(private readonly tenantsService: TenantsService) {}
+  constructor(
+    private readonly ctx: ContextService,
+    private readonly tenantsService: TenantsService
+  ) {}
 
   @Post()
   create(@Body() body: CreateTenantDto) {
@@ -22,6 +37,14 @@ export class TenantsController {
     return this.tenantsService.overwrite(body);
   }
 
+  @Head(':id') // NOTE - The Head method must be defined before the Get method
+  checkOne(@Param('id') id: string) {
+    if (this.ctx.tenant.id === id) {
+      return this.ctx.tenant;
+    }
+    return this.tenantsService.checkOne(id);
+  }
+
   @Get()
   findAll() {
     return this.tenantsService.findAll();
@@ -29,6 +52,9 @@ export class TenantsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    if (this.ctx.tenant.id === id) {
+      return this.ctx.tenant;
+    }
     return this.tenantsService.findOne(id);
   }
 
