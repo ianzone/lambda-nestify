@@ -31,19 +31,22 @@ export class AppFilter extends BaseExceptionFilter {
     let statusCode = 500;
     let message = '';
     if (exception instanceof HttpException) {
+      this.logger.debug('Built-in HttpException');
       statusCode = exception.getStatus();
       const expRes = exception.getResponse() as any;
       message = expRes?.message;
-      if (statusCode === 404) {
-        super.catch(exception, host);
-        return;
+      if (statusCode < 500) {
+        // client errors
+        this.logger.warn(ctx, message);
+        return super.catch(exception, host);
       }
-      this.logger.warn(ctx, exception.stack);
     } else {
-      // unexpected errors that need to trigger alerts
-      this.logger.error(ctx, exception.stack);
+      this.logger.debug('Non built-in Exception');
       message = exception.message;
     }
+
+    // log Non built-in Exceptions and server errors
+    this.logger.error(ctx, message, exception.stack);
 
     const logTrace = this.ctx.trace;
 
@@ -54,10 +57,11 @@ export class AppFilter extends BaseExceptionFilter {
     if (res instanceof ServerResponse) {
       // in case of thrown from middlewares, the FastifyRequest is not ready
       res.writeHead(statusCode, { 'Content-Type': 'application/json' });
-      res.write(JSON.stringify({ ...logTrace, message }));
+      res.write(JSON.stringify({ logTrace, message }));
       res.end();
     } else {
-      res.status(statusCode).send({ ...logTrace, message });
+      // using FastifyReply
+      res.status(statusCode).send({ logTrace, message });
     }
   }
 }

@@ -23,14 +23,13 @@ export class AppInterceptor implements NestInterceptor {
     const { ip, method, url } = req;
 
     // @ts-ignore
-    const cxt = req?.awsLambda?.context as Context | undefined;
-    this.ctx.trace = {
-      groupId: cxt?.logGroupName,
-      streamId: cxt?.logStreamName,
-      requestId: cxt?.awsRequestId,
-    };
+    const cxt = req?.awsLambda?.context as Context;
+    this.ctx.trace = cxt?.logGroupName
+      ? `https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${encodeURIComponent(
+          encodeURIComponent(cxt.logGroupName)
+        )}/log-events/${encodeURIComponent(encodeURIComponent(cxt.logStreamName))}`
+      : '';
 
-    this.logger.debug(`awsRequestId: ${cxt?.awsRequestId}`);
     this.logger.debug(
       `${method} ${url} ${userAgent} ${ip}: ${context.getClass().name} ${
         context.getHandler().name

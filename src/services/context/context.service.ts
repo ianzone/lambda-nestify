@@ -31,12 +31,12 @@ export class ContextService {
     this.cls.set<User>('user', val);
   }
 
-  get trace(): LogTrace {
-    return this.cls.get<LogTrace>('trace');
+  get trace() {
+    return this.cls.get<string>('trace');
   }
 
-  set trace(val: LogTrace) {
-    this.cls.set<LogTrace>('trace', val);
+  set trace(val: string) {
+    this.cls.set<string>('trace', val);
   }
 }
 
@@ -49,11 +49,7 @@ export interface Auth {
   name: string;
   groups: string[];
 }
-interface LogTrace {
-  groupId: string | undefined;
-  streamId: string | undefined;
-  requestId: string | undefined;
-}
+
 export interface Aux {
   auth: Auth;
   tenant: Tenant;
