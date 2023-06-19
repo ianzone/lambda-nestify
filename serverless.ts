@@ -119,6 +119,7 @@ const serverlessConfiguration: AWS = {
     'serverless-localstack',
     'serverless-offline',
     'serverless-domain-manager',
+    'serverless-associate-waf',
   ],
 
   custom: {
@@ -155,6 +156,10 @@ const serverlessConfiguration: AWS = {
       basePath: '${sls:stage}',
       autoDomain: true,
       preserveExternalPathMappings: true,
+    },
+    associateWaf: {
+      name: 'ApiGateway-ACL-${sls:stage}',
+      version: 'V2',
     },
   },
 
