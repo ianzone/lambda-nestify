@@ -7,7 +7,12 @@
       "decorators": true,
       "dynamicImport": true
     },
-    "baseUrl": "./"
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    }
   },
   "minify": false
 }
