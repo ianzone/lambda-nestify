@@ -9,6 +9,7 @@ async function bootstrap(): Promise<Handler> {
   await app.init();
 
   const fastifyInstance = app.getHttpAdapter().getInstance();
+  // @ts-ignore https://github.com/fastify/aws-lambda-fastify
   return awsLambdaFastify(fastifyInstance);
 }
 

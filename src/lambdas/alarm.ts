@@ -19,7 +19,7 @@ export const handler: Handler = async (event: CloudWatchLogsEvent, context: Cont
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sns/classes/publishcommand.html
   const params = {
     Subject: `Error in ${data.logGroup}`,
-    Message: `AccountID: ${data.owner}\nLogGroup: ${data.logGroup}\nLogStream: ${data.logStream}\nLogUrl: ${cloudWatchUrl}`,
+    Message: `AccountID: ${data.owner}\nLogGroup: ${data.logGroup}\nLogStream: ${data.logStream}\nLogUrl: ${cloudWatchUrl}\nData: ${data.logEvents[0].message}`,
     TopicArn: process.env.TopicArn,
   };
 

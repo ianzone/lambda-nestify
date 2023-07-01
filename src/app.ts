@@ -116,16 +116,11 @@ export async function createApp() {
     app.useLogger(app.get(LogService));
   }
 
-  // @ts-ignore https://github.com/fastify/fastify-helmet/issues/216
+  // @ts-ignore https://helmetjs.github.io/
   await app.register(helmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: [`'self'`],
-        styleSrc: [`'self'`, `'unsafe-inline'`],
-        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
-        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
-      },
-    },
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    xFrameOptions: false,
   });
 
   setVersioning(app);

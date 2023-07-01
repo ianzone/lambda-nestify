@@ -61,7 +61,8 @@ export class AppFilter extends BaseExceptionFilter {
       res.end();
     } else {
       // using FastifyReply
-      res.status(statusCode).send({ logTrace, message });
+      res.status(statusCode);
+      res.send({ logTrace, message });
     }
   }
 }
