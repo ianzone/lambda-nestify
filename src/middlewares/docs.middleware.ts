@@ -1,25 +1,21 @@
-import { Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FastifyRequest } from 'fastify';
 import fs from 'fs';
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
 import path from 'path';
 import { Configs } from 'src/configs';
 
 @Injectable()
 export class DocsMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(DocsMiddleware.name);
-
   constructor(private readonly configs: ConfigService<Configs>) {}
 
-  use(req: IncomingMessage, res: ServerResponse, next: () => void) {
-    const url = new URL(`${this.configs.get<string>('baseUrl')}${req.url}`);
-    const pathname = url.pathname;
-
-    if (pathname.includes('swagger-ui-init.js')) {
+  use(req: FastifyRequest, res: ServerResponse, next: () => void) {
+    if (req.originalUrl.includes('swagger-ui-init.js')) {
       return next();
     }
 
-    const lastPath = pathname.split('/').pop() || '';
+    const lastPath = req.originalUrl.split('/').pop() || '';
 
     switch (lastPath.split('.').pop()) {
       case 'html':
@@ -38,12 +34,13 @@ export class DocsMiddleware implements NestMiddleware {
         res.setHeader('Content-Type', 'image/png');
         break;
       default:
-        // not a static asset
-        if (url.searchParams.get('token') !== this.configs.get<string>('token')) {
+        // @ts-ignore not a static asset
+        if (req.query?.token !== this.configs.get<string>('token')) {
           throw new UnauthorizedException();
         }
         return next();
     }
+
     res.write(bufferFile(lastPath));
     res.end();
     return next();

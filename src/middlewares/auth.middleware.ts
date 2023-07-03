@@ -1,14 +1,11 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import { IncomingMessage, ServerResponse } from 'http';
+import { FastifyRequest } from 'fastify';
+import { ServerResponse } from 'http';
 import { TenantsService, UsersService } from 'src/routes';
 import { Aux, ContextService } from 'src/services';
 import { verify } from 'src/utils';
-
-interface Req extends IncomingMessage {
-  originalUrl: string;
-}
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -23,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
-  async use(req: Req, res: ServerResponse, next: Function) {
+  async use(req: FastifyRequest, res: ServerResponse, next: Function) {
     const { authorization } = req.headers;
     const jwt = authorization?.split('Bearer ')[1];
     if (!jwt) throw new Error('missing authorization');

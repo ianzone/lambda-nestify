@@ -61,6 +61,6 @@ export class AppModule implements NestModule {
 
     consumer.apply(AuthMiddleware).exclude().forRoutes(UsersController, ResourcesController);
 
-    consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs-json');
+    consumer.apply(DocsMiddleware).forRoutes('/docs', '/docs/(.*)', '/docs-json');
   }
 }

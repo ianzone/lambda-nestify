@@ -29,9 +29,9 @@ export class LogService extends ConsoleLogger {
     const context = optionalParams.pop();
     if (
       this.isLevelEnabled('log') &&
-      context !== 'RouterExplorer' &&
-      context !== 'RoutesResolver' &&
-      context !== 'NestApplication'
+      context !== '_RouterExplorer' &&
+      context !== '_RoutesResolver' &&
+      context !== '_NestApplication'
     ) {
       console.log(context, 'LOG', JSON.stringify(message, null, 2), ...optionalParams);
     }
