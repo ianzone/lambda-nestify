@@ -24,7 +24,7 @@ export default (): Configs => {
     baseUrl: `${baseUrl}${stagePath}`,
     basePath: stagePath,
     token: 'Secure_2023',
-    logLevel: stagePath === '/dev' ? ['debug'] : ['error'],
+    logLevel: stagePath === '/dev' ? ['debug'] : ['warn'],
   };
 };
 

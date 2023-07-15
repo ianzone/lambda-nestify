@@ -10,7 +10,7 @@ export class LogService extends ConsoleLogger {
     });
   }
 
-  // level: debug -> verbose -> info -> warning -> error
+  // level: debug -> verbose -> info -> warn -> error
   debug(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('debug')) {
       const context = optionalParams.pop();
