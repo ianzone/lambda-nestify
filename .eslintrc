@@ -28,7 +28,7 @@
     "max-classes-per-file": "off",
   },
   "ignorePatterns": [
-    "*",
+    "/*",
     "!/src"
   ]
 }
