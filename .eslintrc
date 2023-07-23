@@ -26,6 +26,16 @@
     "@typescript-eslint/ban-ts-comment": "warn",
     "class-methods-use-this": "off",
     "max-classes-per-file": "off",
+    "no-plusplus": "off",
+    "no-await-in-loop": "off",
+    "radix": "off",
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-multi-assign": "off",
+    "no-restricted-syntax": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "no-template-curly-in-string": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off"
   },
   "ignorePatterns": [
     "/*",
