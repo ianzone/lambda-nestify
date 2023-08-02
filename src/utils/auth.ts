@@ -25,7 +25,7 @@ async function getUser(accessToken: string) {
       emailVerified = item.Value;
     }
     if (item.Name === 'email') {
-      email = item.Value as string;
+      email = item.Value!;
     }
     if (item.Name === 'custom:FirstName') {
       firstName = item.Value;

@@ -16,11 +16,11 @@ export class AuthMiddleware implements NestMiddleware {
     private readonly cache: Cache,
     private readonly tenants: TenantsService,
     private readonly users: UsersService,
-    private readonly ctx: ContextService
+    private readonly ctx: ContextService,
   ) {}
 
   // https://www.fastify.io/docs/latest/Reference/Middleware/
-  async use(req: FastifyRequest, res: ServerResponse, next: Function) {
+  async use(req: FastifyRequest, res: ServerResponse, next: () => void) {
     const { authorization } = req.headers;
     const jwt = authorization?.split('Bearer ')[1];
     if (!jwt) throw new Error('missing authorization');
@@ -61,7 +61,9 @@ export class AuthMiddleware implements NestMiddleware {
       user: this.ctx.user,
     };
 
-    this.cache.set(jwt, auxData);
+    this.cache.set(jwt, auxData).catch((err) => {
+      this.logger.error(err);
+    });
     return next();
   }
 }

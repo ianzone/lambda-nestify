@@ -6,6 +6,9 @@ import { ServerResponse } from 'http';
 import path from 'path';
 import { Configs } from 'src/configs';
 
+function bufferFile(filename: string) {
+  return fs.readFileSync(path.join(path.resolve(), 'node_modules/swagger-ui-dist/', filename));
+}
 @Injectable()
 export class DocsMiddleware implements NestMiddleware {
   constructor(private readonly configs: ConfigService<Configs>) {}
@@ -45,8 +48,4 @@ export class DocsMiddleware implements NestMiddleware {
     res.end();
     return next();
   }
-}
-
-function bufferFile(filename: string) {
-  return fs.readFileSync(path.join(path.resolve(), 'node_modules/swagger-ui-dist/', filename));
 }

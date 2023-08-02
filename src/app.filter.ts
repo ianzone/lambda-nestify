@@ -33,7 +33,7 @@ export class AppFilter extends BaseExceptionFilter {
     if (exception instanceof HttpException) {
       this.logger.debug('Built-in HttpException');
       statusCode = exception.getStatus();
-      const expRes = exception.getResponse() as any;
+      const expRes = exception.getResponse() as { message: string };
       message = expRes?.message;
       if (statusCode < 500) {
         // client errors
@@ -51,7 +51,7 @@ export class AppFilter extends BaseExceptionFilter {
     const logTrace = this.ctx.trace;
 
     this.logger.debug(
-      '========================================================================================================================'
+      '========================================================================================================================',
     );
 
     if (res instanceof ServerResponse) {
@@ -61,8 +61,8 @@ export class AppFilter extends BaseExceptionFilter {
       res.end();
     } else {
       // using FastifyReply
-      res.status(statusCode);
-      res.send({ logTrace, message });
+      await res.code(statusCode).send({ logTrace, message });
     }
+    return 0;
   }
 }

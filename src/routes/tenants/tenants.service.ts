@@ -11,7 +11,7 @@ export class TenantsService {
 
   constructor(
     @InjectModel('tenants')
-    private tenants: Model<Tenant, { id: string }>
+    private tenants: Model<Tenant, { id: string }>,
   ) {}
 
   create(body: CreateTenantDto) {
@@ -53,8 +53,8 @@ export class TenantsService {
         { id },
         {
           return: 'item',
-          attributes: attributes,
-        }
+          attributes,
+        },
       );
     }
 
@@ -65,7 +65,7 @@ export class TenantsService {
   }
 
   update(id: string, body: UpdateTenantDto) {
-    return `This action updates a #${id} tenant with ${body}`;
+    return `This action updates a #${id} tenant with ${JSON.stringify(body, null, 2)}`;
   }
 
   remove(id: string) {

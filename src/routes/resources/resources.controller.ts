@@ -22,14 +22,15 @@ import { ResourcesService } from './resources.service';
 @Controller('resources')
 export class ResourcesController {
   private logger = new Logger(ResourcesController.name);
+
   constructor(
     private readonly ctx: ContextService,
-    private readonly resourcesService: ResourcesService
+    private readonly resourcesService: ResourcesService,
   ) {}
 
   @Post()
   create(@Body() body: CreateResourceDto) {
-    const user = this.ctx.user;
+    const { user } = this.ctx;
     return this.resourcesService.create(user.id, body);
   }
 

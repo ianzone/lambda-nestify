@@ -6,8 +6,8 @@ import { Resource } from './entities/resource.entity';
 @Injectable()
 export class ResourcesService {
   private logger = new Logger(ResourcesService.name);
+
   private items: Resource[] = [];
-  constructor() {}
 
   create(userId: string, body: CreateResourceDto) {
     const item = new Resource({
@@ -19,7 +19,7 @@ export class ResourcesService {
   }
 
   overwrite(body: CreateResourceDto) {
-    return `This action overwrites a resource ${body}`;
+    return `This action overwrites a resource ${JSON.stringify(body, null, 2)}`;
   }
 
   findAll(userId: string) {
@@ -37,7 +37,7 @@ export class ResourcesService {
   }
 
   update(id: string, body: UpdateResourceDto) {
-    return `This action updates the #${id} resource with ${body}`;
+    return `This action updates the #${id} resource with ${JSON.stringify(body, null, 2)}`;
   }
 
   remove(id: string) {

@@ -26,7 +26,10 @@ import { UsersService } from './users.service';
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
 
-  constructor(private readonly ctx: ContextService, private readonly usersService: UsersService) {}
+  constructor(
+    private readonly ctx: ContextService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post()
   create(@Body() body: CreateUserDto) {
@@ -48,7 +51,7 @@ export class UsersController {
 
   @Get()
   findAll(@Query() query: QueryUserDto) {
-    const auth = this.ctx.auth;
+    const { auth } = this.ctx;
     return this.usersService.findAll(auth.tenantId, query);
   }
 
@@ -62,13 +65,13 @@ export class UsersController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: UpdateUserDto) {
-    const auth = this.ctx.auth;
+    const { auth } = this.ctx;
     return this.usersService.update(auth.tenantId, id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    const auth = this.ctx.auth;
+    const { auth } = this.ctx;
     return this.usersService.remove(auth.tenantId, id);
   }
 }

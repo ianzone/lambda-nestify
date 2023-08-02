@@ -12,7 +12,7 @@ export class UsersService {
 
   constructor(
     @InjectModel('users')
-    private users: Model<User, { id: string; tenantId: string }>
+    private users: Model<User, { id: string; tenantId: string }>,
   ) {}
 
   create(body: CreateUserDto) {
@@ -60,7 +60,7 @@ export class UsersService {
     } else {
       res = await this.users.get(key, {
         return: 'item',
-        attributes: attributes,
+        attributes,
       });
     }
 
@@ -69,8 +69,9 @@ export class UsersService {
     }
     return res;
   }
+
   update(tenantId: string, id: string, body: UpdateUserDto) {
-    return `This action updates a #${id} user with ${body}`;
+    return `This action updates a #${id} user with ${JSON.stringify(body, null, 2)}`;
   }
 
   remove(tenantId: string, id: string) {

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Configs } from 'src/configs';
@@ -10,7 +13,7 @@ export class LogService extends ConsoleLogger {
     });
   }
 
-  // level: debug -> verbose -> info -> warn -> error
+  // level: debug -> verbose -> log -> warn -> error
   debug(message: any, ...optionalParams: any[]) {
     if (this.isLevelEnabled('debug')) {
       const context = optionalParams.pop();

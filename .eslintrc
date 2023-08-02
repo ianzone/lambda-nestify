@@ -35,7 +35,8 @@
     "no-restricted-syntax": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "no-template-curly-in-string": "off",
-    "@typescript-eslint/prefer-nullish-coalescing": "off"
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "import/order": "off",
   },
   "ignorePatterns": [
     "/*",
