@@ -4,7 +4,6 @@
   "compilerOptions": {
     // Modules
     "baseUrl": ".",
-    "moduleResolution": "Node",
     // Output
     "outDir": "dist",
     "target": "ES2021", // the higher target has some bugs

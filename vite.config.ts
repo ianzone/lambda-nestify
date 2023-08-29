@@ -1,6 +1,8 @@
 import { resolve } from 'path';
+// @ts-ignore  https://github.com/vitejs/vite/issues/11552
 import { loadEnv } from 'vite';
 import { VitePluginNode } from 'vite-plugin-node';
+// @ts-ignore
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig(({ mode }) => ({
