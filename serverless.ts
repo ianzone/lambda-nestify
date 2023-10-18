@@ -25,6 +25,7 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     runtime: 'nodejs18.x',
     architecture: 'arm64',
+    memorySize: 512,
     timeout: 29,
     tags: {
       maintainer: 'ian',
