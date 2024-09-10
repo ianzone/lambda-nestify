@@ -2,11 +2,11 @@ import helmet from '@fastify/helmet';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { LogService } from 'src/services';
 import { AppModule } from './app.module';
-import { Configs } from './configs';
+import type { Configs } from './configs';
 
 function setVersioning(app: NestFastifyApplication) {
   app.enableVersioning({
@@ -54,7 +54,7 @@ function setSwagger(app: NestFastifyApplication, configService: ConfigService<Co
             profile: 'profile',
             'aws.cognito.signin.user.admin': 'aws.cognito.signin.user.admin',
           },
-          authorizationUrl: `https://internal-user.auth.us-east-1.amazoncognito.com/login`,
+          authorizationUrl: 'https://internal-user.auth.us-east-1.amazoncognito.com/login',
         },
       },
     })
@@ -113,6 +113,7 @@ export async function createApp() {
   const configService = app.get(ConfigService);
 
   if (useCustomerLogger) {
+    // biome-ignore lint/correctness/useHookAtTopLevel: <explanation>
     app.useLogger(app.get(LogService));
   }
 

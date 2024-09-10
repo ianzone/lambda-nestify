@@ -1,5 +1,5 @@
-import { Tenant, User } from './routes';
-import { Auth } from './services';
+import type { Tenant, User } from './routes';
+import type { Auth } from './services';
 
 const auth: Auth = {
   token: 'jwt access token',

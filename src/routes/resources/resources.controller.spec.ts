@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ClsModule, ClsService } from 'nestjs-cls';
 import { auth, tenant, user } from 'src/mock';
-import { ContextService, CtxStore } from 'src/services';
+import { ContextService, type CtxStore } from 'src/services';
 import { beforeAll, describe, expect, test, vi } from 'vitest';
-import { CreateResourceDto } from './dto/create-resource.dto';
-import { Resource } from './entities/resource.entity';
+import type { CreateResourceDto } from './dto/create-resource.dto';
+import type { Resource } from './entities/resource.entity';
 import { ResourcesController } from './resources.controller';
 import { ResourcesService } from './resources.service';
 

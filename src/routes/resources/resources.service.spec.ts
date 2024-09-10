@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ClsModule } from 'nestjs-cls';
 import { user } from 'src/mock';
 import { ContextService } from 'src/services';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { CreateResourceDto } from './dto/create-resource.dto';
-import { Resource } from './entities/resource.entity';
+import type { CreateResourceDto } from './dto/create-resource.dto';
+import type { Resource } from './entities/resource.entity';
 import { ResourcesService } from './resources.service';
 
 describe('ResourcesService', () => {

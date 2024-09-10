@@ -4,9 +4,9 @@ import {
   GetUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { decomposeUnverifiedJwt } from 'aws-jwt-verify/jwt';
-import { CognitoAccessTokenPayload } from 'aws-jwt-verify/jwt-model';
+import type { CognitoAccessTokenPayload } from 'aws-jwt-verify/jwt-model';
 import { mock } from 'src/configs';
-import { Auth } from 'src/services';
+import type { Auth } from 'src/services';
 import { errorWrapper } from './errorWrapper';
 
 async function getUser(accessToken: string) {
@@ -14,12 +14,16 @@ async function getUser(accessToken: string) {
 
   const data = await new CognitoIdentityProviderClient({}).send(command);
   const attrs = data.UserAttributes || [];
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let emailVerified;
   let email = '';
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let firstName;
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let lastName;
 
   // https://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/user-pool-settings-attributes.html
+  // biome-ignore lint/complexity/noForEach: <explanation>
   attrs.forEach((item) => {
     if (item.Name === 'email_verified') {
       emailVerified = item.Value;

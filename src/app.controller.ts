@@ -1,6 +1,6 @@
 import { Controller, Get, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import type { AppService } from './app.service';
 
 @ApiExcludeController()
 @Controller()

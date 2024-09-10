@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 // @ts-ignore  https://github.com/vitejs/vite/issues/11552
 import { loadEnv } from 'vite';
 import { VitePluginNode } from 'vite-plugin-node';
@@ -7,7 +7,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig(({ mode }) => ({
   server: {
-    port: parseInt(loadEnv(mode, process.cwd(), 'DEV_').DEV_PORT),
+    port: Number.parseInt(loadEnv(mode, process.cwd(), 'DEV_').DEV_PORT),
   },
   resolve: {
     alias: {
@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    ...VitePluginNode({
+    VitePluginNode({
       adapter: 'nest',
       appPath: './src/main.ts',
       tsCompiler: 'swc',

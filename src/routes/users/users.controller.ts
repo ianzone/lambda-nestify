@@ -14,9 +14,9 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Group, Groups, GroupsGuard } from 'src/guards';
-import { ContextService } from 'src/services';
-import { CreateUserDto, QueryUserDto, UpdateUserDto } from './dto';
-import { UsersService } from './users.service';
+import type { ContextService } from 'src/services';
+import type { CreateUserDto, QueryUserDto, UpdateUserDto } from './dto';
+import type { UsersService } from './users.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()

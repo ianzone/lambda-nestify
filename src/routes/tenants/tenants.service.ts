@@ -1,9 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectModel, Model } from 'nestjs-dynamoose';
+import { InjectModel, type Model } from 'nestjs-dynamoose';
 import { mock } from 'src/configs';
-import { CreateTenantDto } from './dto/create-tenant.dto';
-import { UpdateTenantDto } from './dto/update-tenant.dto';
-import { Tenant } from './schemas/tenant.schema';
+import type { CreateTenantDto } from './dto/create-tenant.dto';
+import type { UpdateTenantDto } from './dto/update-tenant.dto';
+import type { Tenant } from './schemas/tenant.schema';
 
 @Injectable()
 export class TenantsService {

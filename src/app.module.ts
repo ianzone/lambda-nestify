@@ -1,5 +1,5 @@
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { type MiddlewareConsumer, Module, type NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';

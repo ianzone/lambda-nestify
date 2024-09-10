@@ -1,8 +1,8 @@
-import { ArgumentsHost, Catch, HttpException, Logger } from '@nestjs/common';
+import { ServerResponse } from 'node:http';
+import { type ArgumentsHost, Catch, HttpException, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { ServerResponse } from 'http';
-import { ContextService } from './services';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { ContextService } from './services';
 
 // https://docs.nestjs.com/exception-filters#exception-filters
 @Catch()

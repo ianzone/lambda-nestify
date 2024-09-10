@@ -12,3 +12,7 @@ nr dev
 port can be changed in .env
 
 see package.json for more scripts
+
+# Add-ons
+
+Dynamodb access: dynamoose, nestjs-dynamoose

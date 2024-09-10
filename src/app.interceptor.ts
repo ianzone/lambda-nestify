@@ -2,12 +2,18 @@
 https://docs.nestjs.com/interceptors#interceptors
 */
 
-import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
-import { Context } from 'aws-lambda';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { Observable } from 'rxjs';
+import {
+  type CallHandler,
+  type ExecutionContext,
+  Injectable,
+  Logger,
+  type NestInterceptor,
+} from '@nestjs/common';
+import type { Context } from 'aws-lambda';
+import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ContextService } from './services';
+import type { ContextService } from './services';
 
 @Injectable()
 export class AppInterceptor implements NestInterceptor {
@@ -26,22 +32,22 @@ export class AppInterceptor implements NestInterceptor {
     const cxt = req?.awsLambda?.context as Context;
     this.ctx.trace = cxt?.logGroupName
       ? `https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/${encodeURIComponent(
-          encodeURIComponent(cxt.logGroupName)
+          encodeURIComponent(cxt.logGroupName),
         )}/log-events/${encodeURIComponent(encodeURIComponent(cxt.logStreamName))}`
       : '';
 
     this.logger.debug(
       `${method} ${url} ${userAgent} ${ip}: ${context.getClass().name} ${
         context.getHandler().name
-      } invoked...`
+      } invoked...`,
     );
     return next.handle().pipe(
       tap(() => {
         this.logger.debug(`Response time: ${res.getResponseTime()}`);
         this.logger.debug(
-          '========================================================================================================================'
+          '========================================================================================================================',
         );
-      })
+      }),
     );
   }
 }
