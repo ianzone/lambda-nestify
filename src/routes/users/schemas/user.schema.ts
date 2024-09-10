@@ -1,6 +1,6 @@
 import { Schema as DynamoSchema } from 'dynamoose';
-import { SchemaDefinition } from 'dynamoose/dist/Schema';
-import { Schema } from 'type-fest';
+import type { SchemaDefinition } from 'dynamoose/dist/Schema';
+import type { Schema } from 'type-fest';
 
 export interface User {
   tenantId: string;

@@ -1,5 +1,5 @@
 import { Schema as DynamoSchema } from 'dynamoose';
-import { SchemaDefinition } from 'dynamoose/dist/Schema';
+import type { SchemaDefinition } from 'dynamoose/dist/Schema';
 import type { Schema } from 'type-fest';
 
 export interface SDK {
@@ -29,6 +29,7 @@ const tenant: Schema<Tenant, SchemaDefinition[string] | any> = {
   },
   name: String,
   clientId: {
+    // @ts-ignore
     type: Array,
     schema: [String],
   },

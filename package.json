@@ -8,10 +8,8 @@
     "deploy:prod": "nest build && sls deploy --stage prod",
     "test": "vitest --run",
     "docs": "compodoc -p tsconfig.doc.json -s",
-    "format": "prettier src --write --ignore-unknown",
-    "lint": "eslint src --ext .ts",
-    "prepare": "husky install",
-    "commit": "git add . && git commit -m ''"
+    "postinstall": "lefthook install",
+    "commit": "git add -A && git-cz"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.430.0",
@@ -39,6 +37,7 @@
     "type-fest": "^4.4.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@compodoc/compodoc": "^1.1.21",
     "@nestjs/cli": "^10.1.18",
     "@nestjs/testing": "^10.2.7",
@@ -48,18 +47,9 @@
     "@tsconfig/node-lts": "^18.12.5",
     "@types/aws-lambda": "^8.10.125",
     "@types/node": "^20.8.7",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.8.0",
-    "commitizen": "^4.3.0",
     "esbuild": "^0.19.5",
-    "eslint": "^8.51.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
-    "eslint-config-prettier": "^9.0.0",
     "git-cz": "^4.9.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.0.1",
-    "prettier": "^3.0.3",
+    "lefthook": "^1.7.15",
     "serverless": "^3.35.2",
     "serverless-associate-waf": "^1.2.1",
     "serverless-domain-manager": "^7.1.2",
@@ -72,22 +62,5 @@
     "vite-plugin-node": "^3.0.2",
     "vitest": "^0.34.6"
   },
-  "lint-staged": {
-    "*.ts": [
-      "eslint --fix",
-      "prettier --write",
-      "bash -c tsc --noEmit",
-      "vitest related --run"
-    ],
-    "*.!ts": "prettier --write --ignore-unknown"
-  },
-  "config": {
-    "commitizen": {
-      "path": "git-cz"
-    }
-  },
-  "engines": {
-    "node": ">=18",
-    "pnpm": ">=8"
-  }
+  "trustedDependencies": ["@biomejs/biome"]
 }
